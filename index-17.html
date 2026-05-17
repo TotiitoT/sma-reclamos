@@ -1,0 +1,1180 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reclamos Vecinales — San Martín de los Andes</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--g:#1E8449;--gd:#145E32;--gl:#E8F8EF;--a:#1A8FC7;--al:#E3F2FB;--r:#A32D2D;--rl:#FCEBEB;--p:#7D3FAB;--pl:#F3E8FA;--bd:#e0ddd8;--bg:#f7f5f0;--cd:#fff;--tx:#1a1a1a;--t2:#6b6b6b;
+--so:#1E8449;--sol:#E8F8EF;--se:#1A8FC7;--sel:#E3F2FB;--sg:#7D3FAB;--sgl:#F3E8FA}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:14px;line-height:1.5;color:var(--tx);background:var(--bg)}
+.nav{background:var(--g);padding:11px 18px;display:flex;align-items:center;gap:10px}
+.nvl{color:#fff;font-size:14px;font-weight:600} .nvs{color:rgba(255,255,255,.6);font-size:11px}
+.nvb{background:none;border:none;color:rgba(255,255,255,.8);cursor:pointer;font-size:12px;padding:0}
+.snv{background:var(--gd);padding:0 18px;overflow-x:auto}
+.snv-in{max-width:820px;margin:0 auto;display:flex}
+.stb{background:none;border:none;cursor:pointer;padding:9px 13px;font-size:12px;color:rgba(255,255,255,.5);border-bottom:2px solid transparent;white-space:nowrap}
+.stb.on{color:#fff;border-bottom-color:#fff;font-weight:600}
+.ct{max-width:820px;margin:0 auto;padding:16px 14px}
+.nw{max-width:560px;margin:0 auto;padding:16px 14px}
+.card{background:var(--cd);border:1px solid var(--bd);border-radius:12px;padding:14px 18px}
+.card+.card{margin-top:10px}
+.btn{display:inline-flex;align-items:center;gap:5px;padding:8px 16px;border-radius:8px;font-size:13px;font-weight:500;cursor:pointer;border:1px solid transparent;line-height:1;transition:opacity .15s}
+.btn:disabled{opacity:.4;cursor:not-allowed;pointer-events:none} .btn:not(:disabled):hover{opacity:.82}
+.bp{background:var(--g);color:#fff} .bo{background:transparent;color:var(--tx);border-color:#c0bbb5}
+.bsm{padding:5px 10px;font-size:12px} .blg{padding:12px 22px;font-size:14px} .bbl{width:100%;justify-content:center}
+.bdg{display:inline-flex;align-items:center;gap:3px;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:500}
+.pa{background:var(--rl);color:var(--r);padding:1px 8px;border-radius:20px;font-size:10px;font-weight:600}
+.pm{background:var(--al);color:var(--a);padding:1px 8px;border-radius:20px;font-size:10px;font-weight:600}
+.pb{background:#E8F8EF;color:#1E8449;padding:1px 8px;border-radius:20px;font-size:10px;font-weight:600}
+.fg{display:flex;flex-direction:column;gap:3px;margin-bottom:10px}
+.fg label{font-size:11px;font-weight:600;color:var(--t2);text-transform:uppercase;letter-spacing:.3px}
+.fg input,.fg select,.fg textarea{width:100%;padding:8px 10px;border:1px solid var(--bd);border-radius:7px;font-size:13px;color:var(--tx);background:#fff;font-family:inherit}
+.fg input[type=file]{padding:6px 8px;font-size:12px}
+.fg input:focus,.fg select:focus,.fg textarea:focus{outline:none;border-color:var(--g);box-shadow:0 0 0 3px rgba(15,110,86,.1)}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.st{background:var(--bg);border-radius:8px;padding:12px;text-align:center}
+.stn{font-size:24px;font-weight:700} .stl{font-size:10px;color:var(--t2);margin-top:1px}
+.brr{display:flex;align-items:center;gap:7px;margin-bottom:7px}
+.brl{font-size:11px;min-width:110px;color:var(--t2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.brt{flex:1;height:7px;background:var(--bg);border-radius:4px;overflow:hidden}
+.brf{height:100%;border-radius:4px;transition:width .5s}
+.tl{list-style:none}
+.tli{display:flex;gap:10px;padding-bottom:12px;position:relative}
+.tli:not(:last-child)::before{content:'';position:absolute;left:8px;top:18px;bottom:0;width:1px;background:var(--bd)}
+.tld{width:18px;height:18px;border-radius:50%;flex-shrink:0;margin-top:2px;display:flex;align-items:center;justify-content:center;font-size:9px}
+.tlb{flex:1} .tlw{font-size:10px;color:var(--t2)} .tlwh{font-size:12px;font-weight:700;margin-top:1px} .tln{font-size:11px;color:var(--t2);margin-top:1px}
+.steps{display:flex;margin-bottom:16px;border-bottom:2px solid var(--bd)}
+.step{flex:1;text-align:center;padding:7px 4px;font-size:10px;color:var(--t2);border-bottom:2px solid transparent;margin-bottom:-2px}
+.step.active{border-bottom-color:var(--g);color:var(--g);font-weight:700} .step.done{border-bottom-color:#1E8449;color:#1E8449}
+.cg{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.ci{background:var(--cd);border:1.5px solid var(--bd);border-radius:10px;padding:12px;cursor:pointer;transition:border-color .15s,background .15s}
+.ci:hover{border-color:var(--g)} .ci.sel{border-color:var(--g);background:var(--gl)}
+.rt{background:var(--gl);border:1px solid rgba(15,110,86,.2);border-radius:10px;padding:12px 14px}
+.cb{background:var(--bg);border:1.5px dashed #bbb;border-radius:10px;padding:18px;text-align:center;margin:14px 0}
+.cbv{font-size:20px;font-weight:700;letter-spacing:2px;color:var(--g);font-family:monospace}
+.tw{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:12px;table-layout:fixed}
+th{text-align:left;padding:7px 8px;font-size:10px;color:var(--t2);font-weight:700;border-bottom:1px solid var(--bd);text-transform:uppercase;background:var(--bg)}
+td{padding:9px 8px;border-bottom:1px solid var(--bd);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+tr.row:hover td{background:#fafaf9;cursor:pointer}
+.aib{background:var(--pl);border:1px solid rgba(83,74,183,.2);border-radius:8px;padding:10px 12px;margin-top:6px}
+.sl{font-size:10px;font-weight:700;color:var(--t2);text-transform:uppercase;letter-spacing:.4px;margin-bottom:6px}
+.sb{font-size:26px;cursor:pointer;background:none;border:none;padding:3px;line-height:1;opacity:.2;transition:opacity .1s}
+.sb.on{opacity:1}
+.gok{background:#E8F8EF;border:1px solid rgba(59,109,17,.3);border-radius:8px;padding:8px 12px;font-size:12px;color:#1E8449;margin-top:6px}
+.fp{width:100%;border-radius:8px;margin-top:6px;max-height:220px;object-fit:cover;border:1px solid var(--bd)}
+.fop{width:100%;border-radius:8px;margin-top:8px;max-height:260px;object-fit:cover;border:2px solid var(--g)}
+#lmap{border-radius:12px;border:1px solid var(--bd);z-index:0}
+.mleg{display:flex;gap:12px;flex-wrap:wrap;margin-top:10px;padding:10px 14px;background:var(--cd);border-radius:8px;border:1px solid var(--bd);font-size:11px;align-items:center}
+.rh{background:var(--g);color:#fff;border-radius:12px;padding:22px;margin-bottom:14px;text-align:center}
+.rk{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:12px}
+.rki{background:var(--bg);border-radius:8px;padding:14px;text-align:center}
+.rkn{font-size:26px;font-weight:700} .rkl{font-size:10px;color:var(--t2);margin-top:2px}
+.ci2{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid var(--bd)}
+.ci2:last-child{border-bottom:none}
+
+.accbtn{position:fixed;bottom:22px;right:22px;z-index:999;width:50px;height:50px;border-radius:50%;background:#1E8449;color:#fff;border:none;font-size:22px;cursor:pointer;box-shadow:0 3px 10px rgba(0,0,0,.25);display:flex;align-items:center;justify-content:center}
+body.big{font-size:17px}
+body.big .btn{min-height:46px;font-size:15px;padding:12px 20px}
+body.big input,body.big select,body.big textarea{font-size:16px!important;padding:11px 12px!important;line-height:1.5}
+body.big .card{padding:18px 22px}
+body.big .ci,.big .cat-item{padding:16px}
+.yo-tambien{display:flex;align-items:center;gap:8px;background:#F3E8FA;border:1px solid #7D3FAB33;border-radius:10px;padding:12px 14px;margin-bottom:10px;cursor:pointer;transition:opacity .15s}
+.yo-tambien:hover{opacity:.85}
+.wabtn{background:#25D366;color:#fff;border-color:#25D366}
+.wabtn:hover{opacity:.85}
+.pub-map-btn{background:var(--gl);color:var(--g);border:1.5px solid var(--g)}
+.commit-bar{height:10px;border-radius:5px;background:var(--bg);overflow:hidden;margin:8px 0 4px}
+.commit-fill{height:100%;border-radius:5px;background:var(--g);transition:width .6s}
+
+@media print{.snv,.nav,.btn,.np{display:none!important}.rh{background:var(--g)!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+</style>
+</head>
+<body><div id="root"></div>
+<script>
+var CATS=[
+  {id:"alumbrado",name:"Alumbrado Público",icon:"💡",desc:"Luminarias fundidas, zonas oscuras",sec:"obras",sub:"Subsec. Servicios Públicos",area:"Dpto. Alumbrado",t:"5-10 días hábiles",p:"alta"},
+  {id:"calles",name:"Calles y Pavimento",icon:"🛣️",desc:"Baches, pavimento deteriorado",sec:"obras",sub:"Subsec. Obras Públicas",area:"Dir. Obras Públicas",t:"20-45 días hábiles",p:"media"},
+  {id:"residuos",name:"Residuos y Basura",icon:"🗑️",desc:"Recolección irregular, microbasurales",sec:"obras",sub:"Subsec. Servicios Públicos",area:"Depto. Recolección Residuos",t:"3-7 días hábiles",p:"alta"},
+  {id:"espacios",name:"Plazas y Espacios Verdes",icon:"🌳",desc:"Parques descuidados, árboles peligrosos",sec:"obras",sub:"Subsec. Servicios Públicos",area:"Dir. Espacios Verdes",t:"7-15 días hábiles",p:"media"},
+  {id:"agua",name:"Agua e Hidráulica",icon:"💧",desc:"Pérdidas de agua, inundaciones, desagüe tapados",sec:"obras",sub:"Subsec. Servicios Públicos",area:"Dir. Hidráulica",t:"5-10 días hábiles",p:"alta"},
+  {id:"mantenimiento",name:"Mantenimiento Urbano",icon:"🔧",desc:"Mobiliario urbano, señalética dañada",sec:"obras",sub:"Subsec. Gestión y Mantenimiento",area:"Guardas Ambientales",t:"10-20 días hábiles",p:"media"},
+  {id:"comercios",name:"Comercios e Inspecciones",icon:"🏪",desc:"Habilitaciones, infracciones comerciales",sec:"econ",sub:"Subsec. Ingresos Públicos",area:"Dir. Rentas — Act. Lucrativas",t:"10-20 días hábiles",p:"media"},
+  {id:"bromatologia",name:"Bromatología",icon:"🍽️",desc:"Problemas sanitarios, alimentos vencidos",sec:"econ",sub:"Subsec. Ingresos Públicos",area:"Dir. Bromatología",t:"3-7 días hábiles",p:"alta"},
+  {id:"empleo",name:"Empleo y Trabajo",icon:"💼",desc:"Búsqueda de empleo, orientación laboral",sec:"gob",sub:"Subsec. Producción y Empleo",area:"Oficina de Empleo",t:"5-10 días hábiles",p:"baja"},
+  {id:"deportes",name:"Deportes e Instalaciones",icon:"⚽",desc:"Canchas, gimnasios, escuelas deportivas",sec:"gob",sub:"Subsec. Deportes y Juventud",area:"Dir. Gral. Deportes",t:"10-15 días hábiles",p:"baja"},
+  {id:"cementerio",name:"Cementerio",icon:"⛪",desc:"Mantenimiento, trámites funerarios",sec:"obras",sub:"Subsec. Gestión y Mantenimiento",area:"Área Cementerio",t:"5-10 días hábiles",p:"media"},
+  {id:"tramites",name:"Trámites Municipales",icon:"📋",desc:"Expedientes, documentación, consultas",sec:"gob",sub:"Dir. Administración y Despacho",area:"Mesa de Entradas",t:"3-15 días hábiles",p:"media"}
+];
+var SECS={
+  obras:{color:"#1E8449",lt:"#E8F8EF",label:"Sec. Obras y Serv. Públicos"},
+  econ:{color:"#1A8FC7",lt:"#E3F2FB",label:"Sec. Economía y Hacienda"},
+  gob:{color:"#7D3FAB",lt:"#F3E8FA",label:"Sec. Gobierno"}
+};
+var BARRIOS=["Centro","Chapelco","Las Gaviotas","Los Pinos","Los Radales","Los Ñires","Primeros Pinos","Quimey Hue","San Martín Norte","Villa del Sol","Villa Obrera","Villa Turismo","Zona Rural","Otro"];
+var EC={nuevo:{l:"Recibido",c:"#1A8FC7",bg:"#E3F2FB"},en_revision:{l:"Lo estamos mirando",c:"#854F0B",bg:"#FAEEDA"},en_proceso:{l:"En camino ✦",c:"#7D3FAB",bg:"#F3E8FA"},resuelto:{l:"¡Resuelto!",c:"#1E8449",bg:"#E8F8EF"},cerrado:{l:"Cerrado",c:"#5F5E5A",bg:"#F1EFE8"}};
+var PASOS={alumbrado:["Recepción","Inspección en terreno","Reparación programada","Ejecución","Cierre"],calles:["Recepción","Relevamiento técnico","Presupuesto","Ejecución de obra","Cierre"],residuos:["Recepción","Verificación","Operativo de limpieza","Cierre"],espacios:["Recepción","Inspección","Programación","Intervención","Cierre"],agua:["Recepción urgente","Evaluación técnica","Intervención","Verificación","Cierre"],mantenimiento:["Recepción","Evaluación","Programación","Intervención","Cierre"],comercios:["Recepción","Análisis","Inspección","Resolución","Cierre"],bromatologia:["Recepción prioritaria","Inspección en sitio","Acta de infracción","Cierre"],empleo:["Recepción","Entrevista","Orientación","Derivación"],deportes:["Recepción","Evaluación","Respuesta","Cierre"],cementerio:["Recepción","Evaluación","Gestión","Cierre"],tramites:["Recepción","Registro","Derivación","Respuesta","Cierre"]};
+var BC={"Centro":[-40.1567,-71.3525],"Chapelco":[-40.1782,-71.331],"Las Gaviotas":[-40.145,-71.368],"Los Pinos":[-40.149,-71.3448],"Los Radales":[-40.1628,-71.3413],"Los Ñires":[-40.1538,-71.3583],"Primeros Pinos":[-40.1513,-71.3503],"Quimey Hue":[-40.1618,-71.3558],"San Martín Norte":[-40.1382,-71.3508],"Villa del Sol":[-40.1662,-71.359],"Villa Obrera":[-40.17,-71.3542],"Villa Turismo":[-40.1608,-71.3482],"Zona Rural":[-40.19,-71.32],"Otro":[-40.1567,-71.3525]};
+
+var DEMO=[
+  {id:"d1",codigo:"SMA-AL001234",v:{nom:"Carlos Benitez",dni:"27834561",tel:"2972-421830",barrio:"Centro",dir:"Calle San Martín 650"},cat:"alumbrado",desc:"Luminaria fundida en la esquina de San Martín y Villegas hace 10 días. La zona queda completamente oscura de noche y es peligroso para los peatones. Ya hubo dos accidentes menores.",ub:"San Martín esq. Villegas",lat:-40.1571,lng:-71.3518,estado:"en_proceso",prioridad:"alta",fechaCreacion:"2025-05-06T19:30:00",historial:[{f:"2025-05-06T19:30:00",e:"nuevo",n:"Reclamo recibido y registrado en el sistema.",op:"Sistema"},{f:"2025-05-07T09:00:00",e:"en_revision",n:"Verificado por inspector. Luminaria efectivamente fuera de servicio.",op:"Inspector Díaz"},{f:"2025-05-08T14:00:00",e:"en_proceso",n:"Cuadrilla eléctrica asignada. Repuesto solicitado.",op:"Jefe Alumbrado"}],encuesta:null,dniVerif:false,votos:0},
+
+  {id:"d2",codigo:"SMA-CA002345",v:{nom:"María Gutiérrez",dni:"31456789",tel:"2972-438920",barrio:"Villa Obrera",dir:"Calle Los Radales 234"},cat:"calles",desc:"Bache de 40 cm de diámetro y 15 cm de profundidad en Av. Los Radales frente al número 200. Ya rompió dos neumáticos de vecinos del barrio. Es zona de mucho tránsito escolar.",ub:"Av. Los Radales 200",lat:-40.1698,lng:-71.3542,estado:"en_revision",prioridad:"alta",fechaCreacion:"2025-05-05T08:00:00",historial:[{f:"2025-05-05T08:00:00",e:"nuevo",n:"Reclamo recibido.",op:"Sistema"},{f:"2025-05-06T10:00:00",e:"en_revision",n:"Relevamiento técnico programado para esta semana.",op:"Dir. Obras Públicas"}],encuesta:null,dniVerif:false,votos:0},
+
+  {id:"d3",codigo:"SMA-RE003456",v:{nom:"Jorge Salinas",dni:"25678901",tel:"2972-415670",barrio:"Los Pinos",dir:"Pasaje Arrayán 45"},cat:"residuos",desc:"Microbasural formado en el terreno baldío de Pasaje Arrayán al 50. Acumulación de bolsas, electrodomésticos viejos y escombros. Es foco de ratas y olores. Lleva más de un mes sin limpiarse.",ub:"Pasaje Arrayán 50",lat:-40.1492,lng:-71.3448,estado:"resuelto",prioridad:"alta",fechaCreacion:"2025-04-28T11:00:00",historial:[{f:"2025-04-28T11:00:00",e:"nuevo",n:"Reclamo recibido.",op:"Sistema"},{f:"2025-04-29T09:00:00",e:"en_revision",n:"Microbasural confirmado por guardia ambiental.",op:"Guardas Ambientales"},{f:"2025-04-30T07:00:00",e:"en_proceso",n:"Cuadrilla de limpieza en camino.",op:"Subsec. Servicios Públicos"},{f:"2025-05-02T16:00:00",e:"resuelto",n:"Área limpiada. Retiro de 2.5 toneladas de residuos. Cartel informativo colocado.",op:"Jefe Cuadrilla"}],encuesta:{cal:5,com:"Respondieron rapidísimo. Gracias por limpiar el barrio.",f:"2025-05-03T10:00:00"},dniVerif:true,votos:0},
+
+  {id:"d4",codigo:"SMA-EV004567",v:{nom:"Luciana Peralta",dni:"33210987",tel:"2972-447810",barrio:"Las Gaviotas",dir:"Av. Las Gaviotas 310"},cat:"espacios",desc:"Plaza del barrio Las Gaviotas en muy mal estado: pasto sin cortar hace 3 semanas, dos juegos de niños rotos (calesita y hamacas), farolas de la plaza sin funcionar. Los chicos no tienen dónde jugar.",ub:"Plaza barrio Las Gaviotas",lat:-40.1452,lng:-71.3677,estado:"nuevo",prioridad:"media",fechaCreacion:"2025-05-09T09:30:00",historial:[{f:"2025-05-09T09:30:00",e:"nuevo",n:"Reclamo recibido y registrado.",op:"Sistema"}],encuesta:null,dniVerif:false,votos:0},
+
+  {id:"d5",codigo:"SMA-AG005678",v:{nom:"Roberto Flores",dni:"28901234",tel:"2972-429540",barrio:"Centro",dir:"Calle Coronel Díaz 480"},cat:"agua",desc:"Pérdida de agua importante en la vereda de Coronel Díaz al 500. El agua corre constantemente hace 4 días, se forma un charco grande que corta la vereda. Riesgo de hundimiento.",ub:"Coronel Díaz 500",lat:-40.1562,lng:-71.3531,estado:"en_proceso",prioridad:"alta",fechaCreacion:"2025-05-07T07:15:00",historial:[{f:"2025-05-07T07:15:00",e:"nuevo",n:"Reclamo recibido. Alta prioridad asignada automáticamente.",op:"Sistema"},{f:"2025-05-07T08:30:00",e:"en_revision",n:"Urgencia confirmada telefónicamente.",op:"Dir. Hidráulica"},{f:"2025-05-07T11:00:00",e:"en_proceso",n:"Equipo de hidráulica en el lugar realizando reparación.",op:"Técnico Ramírez"}],encuesta:null,dniVerif:false,votos:0},
+
+  {id:"d6",codigo:"SMA-MA006789",v:{nom:"Silvia Contreras",dni:"26543210",tel:"2972-433670",barrio:"Los Ñires",dir:"Calle Los Ñires 120"},cat:"mantenimiento",desc:"Banco de hormigón de la placita Los Ñires partido por la mitad. El filo del hormigón roto es muy peligroso, ya lastimó a una nena de 6 años. También hay dos cestos de basura arrancados del piso.",ub:"Placita barrio Los Ñires",lat:-40.154,lng:-71.3581,estado:"nuevo",prioridad:"alta",fechaCreacion:"2025-05-08T16:00:00",historial:[{f:"2025-05-08T16:00:00",e:"nuevo",n:"Reclamo recibido.",op:"Sistema"}],encuesta:null,dniVerif:false,votos:0},
+
+  {id:"d7",codigo:"SMA-CO007890",v:{nom:"Andrés Vidal",dni:"30123456",tel:"2972-456780",barrio:"Villa Turismo",dir:"Av. San Martín 890"},cat:"comercios",desc:"Comercio gastronómico en Av. San Martín 880 funciona sin habilitación municipal visible, con mesas en la vereda sin autorización, generando ruidos molestos hasta la madrugada y obstruyendo el tránsito peatonal.",ub:"Av. San Martín 880",lat:-40.161,lng:-71.348,estado:"en_revision",prioridad:"media",fechaCreacion:"2025-05-04T22:00:00",historial:[{f:"2025-05-04T22:00:00",e:"nuevo",n:"Reclamo recibido.",op:"Sistema"},{f:"2025-05-05T10:00:00",e:"en_revision",n:"Verificación de habilitación iniciada. Inspección programada.",op:"Dir. Rentas"}],encuesta:null,dniVerif:false,votos:0},
+
+  {id:"d8",codigo:"SMA-BR008901",v:{nom:"Patricia Moreno",dni:"29876543",tel:"2972-411230",barrio:"Centro",dir:"Calle Perito Moreno 145"},cat:"bromatologia",desc:"Rotisería en Perito Moreno 150 exhibe pollos y empanadas sin refrigeración en mostrador externo a pleno sol. Los productos no tienen fecha de elaboración visible. Varios clientes tuvieron malestares estomacales.",ub:"Perito Moreno 150",lat:-40.1569,lng:-71.3523,estado:"resuelto",prioridad:"alta",fechaCreacion:"2025-04-25T13:00:00",historial:[{f:"2025-04-25T13:00:00",e:"nuevo",n:"Reclamo recibido. Prioridad alta por riesgo sanitario.",op:"Sistema"},{f:"2025-04-25T15:00:00",e:"en_revision",n:"Inspector de bromatología asignado con urgencia.",op:"Dir. Bromatología"},{f:"2025-04-26T09:00:00",e:"en_proceso",n:"Inspección realizada. Infracción confirmada. Decomiso de 8kg de productos.",op:"Inspector Herrera"},{f:"2025-04-26T17:00:00",e:"resuelto",n:"Acta de infracción N°2847 labrada. Local clausurado preventivamente hasta regularización. Propietario notificado.",op:"Dir. Bromatología"}],encuesta:{cal:5,com:"Actuaron el mismo día. Muy bien, es un tema de salud pública.",f:"2025-04-27T09:00:00"},dniVerif:true,votos:0},
+
+  {id:"d9",codigo:"SMA-EM009012",v:{nom:"Facundo Ríos",dni:"35123098",tel:"2972-422340",barrio:"San Martín Norte",dir:"Calle Norte 345"},cat:"empleo",desc:"Soy joven de 22 años, terminé el secundario y busco trabajo hace 6 meses sin éxito. No sé cómo inscribirme en los programas municipales de empleo ni qué capacitaciones hay disponibles. Necesito orientación.",ub:"Barrio San Martín Norte",lat:-40.138,lng:-71.351,estado:"en_proceso",prioridad:"baja",fechaCreacion:"2025-05-03T10:30:00",historial:[{f:"2025-05-03T10:30:00",e:"nuevo",n:"Solicitud recibida.",op:"Sistema"},{f:"2025-05-05T09:00:00",e:"en_revision",n:"Derivado a Oficina de Empleo Municipal.",op:"Admin"},{f:"2025-05-06T11:00:00",e:"en_proceso",n:"Entrevista de orientación laboral agendada para el 12/05.",op:"Oficina de Empleo"}],encuesta:null,dniVerif:false,votos:0},
+
+  {id:"d10",codigo:"SMA-DE010123",v:{nom:"Valentina Herrera",dni:"32098765",tel:"2972-437890",barrio:"Quimey Hue",dir:"Calle Quimey 220"},cat:"deportes",desc:"La cancha de fútbol del polideportivo del barrio Quimey Hue tiene los arcos sin redes desde hace 2 meses y el piso del vestuario está inundado por una pérdida de agua. Los chicos de la escuela deportiva no pueden entrenar.",ub:"Polideportivo Quimey Hue",lat:-40.162,lng:-71.3556,estado:"en_revision",prioridad:"media",fechaCreacion:"2025-05-07T17:00:00",historial:[{f:"2025-05-07T17:00:00",e:"nuevo",n:"Reclamo recibido.",op:"Sistema"},{f:"2025-05-08T10:00:00",e:"en_revision",n:"Evaluación de instalaciones programada para esta semana.",op:"Dir. Gral. Deportes"}],encuesta:null,dniVerif:false,votos:0},
+
+  {id:"d11",codigo:"SMA-CE011234",v:{nom:"Graciela Mendoza",dni:"24567890",tel:"2972-419870",barrio:"Centro",dir:"Av. Costanera 78"},cat:"cementerio",desc:"El sector C del cementerio municipal presenta graves problemas de mantenimiento: caminos internos con barro, iluminación nocturna sin funcionar y la capilla con goteras. Imposible acceder dignamente a visitar a los familiares.",ub:"Cementerio Municipal — Sector C",lat:-40.1567,lng:-71.3525,estado:"en_proceso",prioridad:"media",fechaCreacion:"2025-05-02T14:00:00",historial:[{f:"2025-05-02T14:00:00",e:"nuevo",n:"Reclamo recibido.",op:"Sistema"},{f:"2025-05-03T09:00:00",e:"en_revision",n:"Inspección de infraestructura realizada.",op:"Subsec. Gestión y Mantenimiento"},{f:"2025-05-05T11:00:00",e:"en_proceso",n:"Trabajos de mantenimiento programados. Materiales solicitados.",op:"Jefe Mantenimiento"}],encuesta:null,dniVerif:false,votos:0},
+
+  {id:"d12",codigo:"SMA-TR012345",v:{nom:"Marcela Suárez",dni:"31789456",tel:"2972-445610",barrio:"Centro",dir:"Belgrano 234"},cat:"tramites",desc:"Inicié un expediente de habilitación comercial hace 45 días (Exp. N° 4521/2025) y no tengo ninguna respuesta. Fui 4 veces a Mesa de Entradas y me dicen que está en proceso pero nadie me da información concreta. Necesito saber el estado.",ub:"Municipalidad — Mesa de Entradas",lat:-40.1567,lng:-71.352,estado:"nuevo",prioridad:"media",fechaCreacion:"2025-05-09T11:00:00",historial:[{f:"2025-05-09T11:00:00",e:"nuevo",n:"Reclamo recibido.",op:"Sistema"}],encuesta:null,dniVerif:false,votos:0}
+];
+
+// Fotos en memoria (evita límite localStorage)
+window._F={};
+function gf(id,t){return window._F[id]&&window._F[id][t]||null;}
+function sf(id,t,b){if(!window._F[id])window._F[id]={};window._F[id][t]=b;}
+
+var S={
+  page:"landing",
+  reclamos:(function(){try{var d=JSON.parse(localStorage.getItem("sma5"));return(d&&d.length)?d:JSON.parse(JSON.stringify(DEMO));}catch(e){return JSON.parse(JSON.stringify(DEMO));}}()),
+  vf:{}, rf:{step:1,cat:"",desc:"",ub:"",ai:null,loading:false,lat:null,lng:null,gps:false,fprev:null,fdata:null},
+  tc:"",td:"",tR:null,tE:"",
+  sR:null,sRat:0,sCom:"",
+  aF:"todos",aC:"todas", selR:null,nE:"",nN:"",
+  lastR:null, mF:"todos",mH:false,mC:"todas",mMode:"sec",
+  repN:"",repL:false
+};
+var _map=null,_hl=null,_mk=[];
+var WA_NUM="5492972000000"; // ← Cambiar por número real
+var TEL_DISPLAY="2972-xxxxxxx"; // ← Cambiar por número real
+
+
+function sv(){try{localStorage.setItem("sma5",JSON.stringify(S.reclamos));}catch(e){}}
+function gc(id){return CATS.find(function(c){return c.id===id;})||{name:id,icon:"📋",sec:"obras",sub:"",area:"",t:"—",p:"media"};}
+function si(catId){var c=gc(catId);return SECS[c.sec]||SECS.obras;}
+function gcode(){var c="ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",r="SMA-";for(var i=0;i<8;i++)r+=c[Math.floor(Math.random()*c.length)];return r;}
+function fd(d){return new Date(d).toLocaleDateString("es-AR",{day:"2-digit",month:"2-digit",year:"numeric",hour:"2-digit",minute:"2-digit"});}
+function fds(d){return new Date(d).toLocaleDateString("es-AR",{day:"2-digit",month:"2-digit",year:"numeric"});}
+function bdg(e){var c=EC[e]||EC.nuevo;return'<span class="bdg" style="background:'+c.bg+';color:'+c.c+'">'+c.l+'</span>';}
+function pbdg(p){return'<span class="'+(p==="alta"?"pa":p==="media"?"pm":"pb")+'">'+p+'</span>';}
+function rnd(){return(Math.random()-.5)*.004;}
+function days(d){return Math.floor((Date.now()-new Date(d))/(864e5));}
+
+function img(tag,cls,src,alt){return'<img class="'+cls+'" src="'+src+'" alt="'+(alt||"")+'">';}
+
+function compImg(file,cb){
+  var r=new FileReader();
+  r.onload=function(e){
+    var im=new Image();
+    im.onload=function(){
+      var cv=document.createElement("canvas"),w=im.width,h=im.height,mx=800;
+      if(w>mx){h=Math.round(h*mx/w);w=mx;}
+      if(h>mx){w=Math.round(w*mx/h);h=mx;}
+      cv.width=w;cv.height=h;
+      cv.getContext("2d").drawImage(im,0,0,w,h);
+      cb(cv.toDataURL("image/jpeg",.72));
+    };
+    im.src=e.target.result;
+  };
+  r.readAsDataURL(file);
+}
+
+// ---- NAV ----
+function nav(sub,back){
+  return'<nav class="nav">'+(back?'<button class="nvb" onclick="go(\''+back+'\')">← Volver</button>':'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>')
+  +'<div><div class="nvl">Municipalidad San Martín de los Andes</div><div class="nvs">'+sub+'</div></div></nav>';
+}
+function anav(){
+  var tabs=[["dashboard","📊 Dashboard"],["admin-mapa","🗺 Mapa en vivo"],["admin-claims","📋 Reclamos"],["admin-analytics","📈 Análisis"],["admin-compromisos","🎯 Compromisos"],["admin-reporte","📄 Reporte"]];
+  return'<nav class="nav" style="padding:10px 18px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>'
+  +'<div style="display:flex;flex-direction:column"><div class="nvl">Panel de Administración — San Martín de los Andes</div><div class="nvs">Acceso: '+(window.location.href.split("?")[0])+'?admin</div></div>'  
+  +'<button onclick="go(\'landing\')" style="background:none;border:none;color:rgba(255,255,255,.5);cursor:pointer;font-size:12px;margin-left:auto">← Salir</button></nav>'
+  +'<div class="snv"><div class="snv-in">'+tabs.map(function(t){return'<button class="stb'+(S.page===t[0]?" on":"")+('" onclick="go(\''+t[0]+'\')">')+t[1]+'</button>';}).join('')+'</div></div>';
+}
+
+// ---- PÁGINAS VECINO ----
+function pgLanding(){
+  var res=S.reclamos.filter(function(r){return r.estado==="resuelto"||r.estado==="cerrado";}).length;
+  var proc=S.reclamos.filter(function(r){return r.estado==="en_proceso"||r.estado==="en_revision";}).length;
+  var tot=S.reclamos.length;
+  return '<button class="accbtn" onclick="toggleAcc()" title="Modo accesible">'+( S.acc?"🔡":"🔤")+'</button>'
+  +nav("Sistema de Reclamos Vecinales — Portal Público")
+  +'<div class="nw">'
+  +'<div style="text-align:center;padding:24px 0 18px">'
+  +'<div style="width:64px;height:64px;border-radius:50%;background:var(--g);display:flex;align-items:center;justify-content:center;margin:0 auto 14px"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>'
+  +'<h1 style="font-size:22px;font-weight:700;margin-bottom:8px">Reclamos Vecinales</h1>'
+  +'<p style="color:var(--t2);font-size:13px;max-width:360px;margin:0 auto">Visibilizá tu problema, exigí una solución. Cada reclamo queda registrado y tiene que ser resuelto.</p>'
+  +'</div>'
+  +'<div style="display:flex;flex-direction:column;gap:10px;margin-bottom:20px">'
+  +'<button class="btn bp blg bbl" onclick="go(\'vecino-home\')">🏘️ &nbsp;Cargar o Seguir mi Reclamo</button>'
+  +'<a href="https://wa.me/'+WA_NUM+'?text=Hola%2C+quiero+hacer+un+reclamo+vecinal+en+San+Mart%C3%ADn+de+los+Andes" target="_blank" class="btn wabtn blg bbl" style="text-decoration:none;justify-content:center">📲 &nbsp;Hacer reclamo por WhatsApp</a>'
+  +'<button class="btn pub-map-btn blg bbl" onclick="go(\'mapa-publico\')">🗺 &nbsp;Ver mapa de problemas del barrio</button>'
+  +'<button class="btn bo blg bbl" onclick="go(\'dashboard\')">🔐 &nbsp;Panel de Administración</button>'
+  +'</div>'
+  +'<div style="text-align:center;margin-bottom:16px;padding:10px;background:var(--bg);border-radius:10px">'
+  +'<span style="font-size:12px;color:var(--t2)">¿Preferís llamar? &nbsp;<a href="tel:+'+WA_NUM+'" style="color:var(--g);font-weight:700;text-decoration:none">📞 '+TEL_DISPLAY+'</a></span>'
+  +'</div>'
+  +'<div class="g3" style="margin-bottom:18px">'
+  +'<div class="st"><div class="stn">'+tot+'</div><div class="stl">Registrados</div></div>'
+  +'<div class="st" style="background:#E8F8EF"><div class="stn" style="color:var(--g)">'+res+'</div><div class="stl">Resueltos</div></div>'
+  +'<div class="st" style="background:#F3E8FA"><div class="stn" style="color:var(--p)">'+proc+'</div><div class="stl">En proceso</div></div>'
+  +'</div>'
+  +'<div class="card">'
+  +'<div class="sl">Tu reclamo, visible. Tu problema, resuelto.</div>'
+  +'<div style="margin-top:8px;display:flex;flex-direction:column;gap:8px">'
+  +["Sacá una foto del problema y registrá el reclamo en minutos","El sistema lo dirige al área responsable con tu ubicación exacta","Seguí cada paso — el municipio tiene que responder","Otros vecinos pueden sumarse a tu reclamo para darle más fuerza"].map(function(t,i){
+    return'<div style="display:flex;gap:10px;align-items:flex-start"><div style="min-width:22px;height:22px;border-radius:50%;background:var(--gl);color:var(--g);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;margin-top:1px">'+(i+1)+'</div><p style="font-size:12px;color:var(--t2);padding-top:3px">'+t+'</p></div>';
+  }).join('')
+  +'</div></div></div>';
+}
+
+function pgVH(){
+  return '<button class="accbtn" onclick="toggleAcc()">'+(S.acc?"🔡":"🔤")+"</button>"
+  +return nav("Portal Vecino","landing")+'<div class="nw">'
+  +'<h2 style="font-size:18px;font-weight:700;margin:16px 0 4px">Hacé visible tu reclamo</h2>'
+  +'<p style="color:var(--t2);font-size:13px;margin-bottom:18px">Cada problema registrado es un compromiso de solución</p>'
+  +'<div style="display:flex;flex-direction:column;gap:10px">'
+  +'<button class="btn bp blg bbl" onclick="go(\'registro\')">✏️ &nbsp;Cargar un nuevo reclamo</button>'
+  +'<button class="btn bo blg bbl" onclick="go(\'tracking\')">🔍 &nbsp;Seguir un reclamo existente</button>'
+  +'</div><div class="card" style="margin-top:16px"><p style="font-size:12px;color:var(--t2)">💡 Para seguir tu reclamo usá el <strong>código SMA-XXXXXXXX</strong> o tu <strong>DNI</strong>. El reclamo queda en el sistema — no desaparece.</p></div></div>';
+}
+
+function pgReg(){
+  var v=S.vf;
+  return nav("Registro de Vecino","vecino-home")+'<div class="nw">'
+  +'<h2 style="font-size:18px;font-weight:700;margin:16px 0 3px">Tus datos personales</h2>'
+  +'<p style="color:var(--t2);font-size:12px;margin-bottom:16px">Tus datos identifican el reclamo. La municipalidad tiene que responderte a vos.</p>'
+  +'<form onsubmit="subReg(event)"><div class="card">'
+  +'<div class="g2"><div class="fg"><label>Nombre *</label><input type="text" name="nombre" value="'+(v.nombre||"")+'" placeholder="Tu nombre" required></div>'
+  +'<div class="fg"><label>Apellido *</label><input type="text" name="apellido" value="'+(v.apellido||"")+'" placeholder="Tu apellido" required></div></div>'
+  +'<div class="g2"><div class="fg"><label>DNI *</label><input type="text" name="dni" value="'+(v.dni||"")+'" placeholder="Ej: 30456789" required></div>'
+  +'<div class="fg"><label>Teléfono *</label><input type="tel" name="telefono" value="'+(v.telefono||"")+'" placeholder="2972-456789" required></div></div>'
+  +'<div class="fg"><label>Email (opcional)</label><input type="email" name="email" value="'+(v.email||"")+'" placeholder="correo@email.com"></div>'
+  +'<div class="fg"><label>Barrio *</label><select name="barrio" required><option value="">— Seleccioná tu barrio —</option>'
+  +BARRIOS.map(function(b){return'<option value="'+b+'"'+(v.barrio===b?" selected":"")+'>'+b+'</option>';}).join('')
+  +'</select></div>'
+  +'<div class="fg" style="margin-bottom:0"><label>Dirección *</label><input type="text" name="direccion" value="'+(v.direccion||"")+'" placeholder="Ej: Av. San Martín 456" required></div>'
+  +'</div>
+  <div style="background:#F3E8FA;border:1.5px solid #7D3FAB44;border-radius:10px;padding:14px 16px;margin-top:12px">
+  <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+    <span style="font-size:20px">🪪</span>
+    <div><div style="font-size:13px;font-weight:700;color:#7D3FAB">Verificación de identidad — Recomendado</div>
+    <div style="font-size:11px;color:#5C2D80;margin-top:1px">Para evitar reclamos falsos necesitamos una foto de tu DNI</div></div></div>
+  <div class="fg" style="margin-bottom:6px"><label style="color:#7D3FAB">Foto del DNI — frente (recomendado)</label>
+    <input type="file" accept="image/*" id="dniIn" onchange="hDNI(this)"></div>
+  <div id="dniPrev"></div>
+  <p style="font-size:11px;color:#5C2D80;margin-top:6px">📌 Tu DNI solo es visible para el personal municipal autorizado. No se comparte con terceros.</p>
+  </div>'
+  +'<button type="submit" class="btn bp blg bbl" style="margin-top:14px">Continuar →</button></form></div>';
+}
+
+function stepsH(active){
+  return'<div class="steps">'+["1. Categoría","2. Descripción y foto","3. Confirmar"].map(function(l,i){
+    return'<div class="step'+(i+1===active?" active":i+1<active?" done":"")+'">'+ l+'</div>';
+  }).join('')+'</div>';
+}
+
+function pgNR(){
+  var rf=S.rf;
+  if(rf.step===1){
+    return nav("Nuevo Reclamo — Paso 1","vecino-home")+'<div class="ct">'+stepsH(1)
+    +'<h2 style="font-size:17px;font-weight:700;margin-bottom:5px">¿Sobre qué es tu reclamo?</h2>'
+    +'<p style="color:var(--t2);font-size:12px;margin-bottom:14px">Elegí la categoría que mejor describe tu problema</p>'
+    +'<div class="cg">'+CATS.map(function(c){var sc=si(c.id);return'<div class="ci'+(rf.cat===c.id?" sel":"")+'" onclick="selCat(\''+c.id+'\')">'
+    +'<div style="font-size:22px;margin-bottom:4px">'+c.icon+'</div><div style="font-size:13px;font-weight:700">'+c.name+'</div>'
+    +'<div style="font-size:11px;color:var(--t2);margin-top:2px">'+c.desc+'</div>'
+    +'<div style="margin-top:6px"><span style="background:'+sc.lt+';color:'+sc.color+';font-size:10px;padding:1px 6px;border-radius:20px;font-weight:600">'+sc.label+'</span></div>'
+    +'</div>';}).join('')+'</div>'
+    +'<button class="btn bp blg bbl" style="margin-top:14px" onclick="nextS()"'+(rf.cat?"":" disabled")+'>Continuar →</button></div>';
+  }
+  if(rf.step===2){
+    var cat=gc(rf.cat);var sc=si(rf.cat);
+    return nav("Nuevo Reclamo — Paso 2")
+    +'<div style="padding:8px 14px 0;max-width:820px;margin:0 auto"><button class="btn bo bsm" onclick="prevS()">← Volver</button></div>'
+    +'<div class="ct">'+stepsH(2)
+    +'<div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;padding:10px 12px;background:'+sc.lt+';border-radius:8px;border:1px solid '+sc.color+'33">'
+    +'<span style="font-size:22px">'+cat.icon+'</span><div><div style="font-size:13px;font-weight:700">'+cat.name+'</div>'
+    +'<div style="font-size:11px;color:'+sc.color+';font-weight:600">'+sc.label+' · ⏱ '+cat.t+'</div></div></div>'
+    +'<form onsubmit="subDesc(event)"><div class="card">'
+    +'<div class="fg"><label>Descripción detallada *</label>'
+    +'<textarea name="desc" rows="4" placeholder="¿Qué pasó? ¿Desde cuándo? ¿Cómo afecta al vecindario?" required>'+(rf.desc||"")+'</textarea></div>'
+    +'<div class="fg"><label>Ubicación exacta *</label>'
+    +'<input type="text" name="ub" id="ubInput" value="'+(rf.ub||"")+'" placeholder="Ej: Calle Rivadavia esq. Coronel Pérez" required></div>'
+    +'<div style="margin-bottom:10px"><div style="font-size:11px;color:var(--t2);margin-bottom:6px">📍 <strong>O marcá en el mapa</strong> — arrastrá el punto hasta el lugar exacto del problema</div><div id="locmap" style="height:220px;border-radius:10px;border:1px solid var(--bd)"></div></div>'
+    +'<div class="fg" style="margin-bottom:4px"><label>📸 Foto del problema como evidencia (recomendado)</label>'
+    +'<input type="file" accept="image/*" id="fvIn" onchange="hFV(this)"></div>'
+    +(rf.fprev?'<img class="fp" src="'+rf.fprev+'" alt="Foto del problema">':'')
+    +'</div>'
+    +'<div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap">'
+    +'<button type="button" class="btn bo bsm" onclick="getGPS()" style="flex:1">📍 '+(rf.gps?"GPS obtenido ✓":"Obtener ubicación GPS")+'</button>'
+    +'<button type="button" class="btn bo bsm" onclick="aiCat()"'+(rf.loading?" disabled":"")+' style="flex:1">🤖 '+(rf.loading?"Clasificando...":"Verificar con IA")+'</button>'
+    +'</div>'
+    +(rf.gps?'<div class="gok">📍 Ubicación GPS capturada. El reclamo quedará georeferenciado en el mapa municipal.</div>':"")
+    +(rf.ai?'<div class="aib" style="margin-top:6px"><div style="font-size:11px;font-weight:700;color:var(--p);margin-bottom:3px">🤖 Sugerencia de IA:</div><p style="font-size:12px;color:var(--t2)">'+rf.ai+'</p></div>':"")
+    +'<button type="submit" class="btn bp blg bbl" style="margin-top:10px">Continuar →</button></form></div>';
+  }
+  if(rf.step===3){
+    var cat=gc(rf.cat);var sc=si(rf.cat);var v=S.vf;
+    return nav("Nuevo Reclamo — Paso 3")
+    +'<div style="padding:8px 14px 0;max-width:820px;margin:0 auto"><button class="btn bo bsm" onclick="prevS()">← Volver</button></div>'
+    +'<div class="ct">'+stepsH(3)
+    +'<h2 style="font-size:17px;font-weight:700;margin-bottom:14px">Confirmá tu reclamo</h2>'
+    +'<div class="card" style="margin-bottom:10px"><div class="sl">Derivado automáticamente a</div>'
+    +'<div class="rt" style="margin-top:8px;background:'+sc.lt+';border-color:'+sc.color+'44">'
+    +'<div style="font-size:13px;font-weight:700;color:'+sc.color+';margin-bottom:8px">📤 '+sc.label+'</div>'
+    +'<div style="display:flex;flex-wrap:wrap;gap:5px;font-size:12px;margin-bottom:8px">'
+    +'<span style="background:'+sc.color+'18;color:'+sc.color+';padding:3px 8px;border-radius:5px">'+cat.sub+'</span>'
+    +'<span style="color:'+sc.color+'">→</span>'
+    +'<span style="background:'+sc.color+'28;color:'+sc.color+';padding:3px 8px;border-radius:5px;font-weight:700">'+cat.area+'</span></div>'
+    +'<div style="display:flex;gap:14px;font-size:12px;color:'+sc.color+'">'
+    +'<span>⏱ <strong>'+cat.t+'</strong></span>'
+    +(rf.fprev?'<span>📸 <strong>Con foto</strong></span>':"")
+    +(rf.gps?'<span>📍 <strong>Geolocali­zado</strong></span>':"")
+    +'</div></div></div>'
+    +'<div class="card" style="margin-bottom:10px"><div class="sl">Resumen</div>'
+    +'<table style="font-size:12px;margin-top:8px;table-layout:auto">'
+    +'<tr><td style="color:var(--t2);padding:4px 0;min-width:80px">Categoría</td><td>'+cat.icon+' '+cat.name+'</td></tr>'
+    +'<tr><td style="color:var(--t2);padding:4px 0">Descripción</td><td style="word-break:break-word;white-space:normal">'+rf.desc+'</td></tr>'
+    +'<tr><td style="color:var(--t2);padding:4px 0">Ubicación</td><td>'+rf.ub+'</td></tr>'
+    +'<tr><td style="color:var(--t2);padding:4px 0">Vecino</td><td>'+(v.nombre||"")+" "+(v.apellido||"")+" — DNI: "+(v.dni||"")+'</td></tr>'
+    +'<tr><td style="color:var(--t2);padding:4px 0">Barrio</td><td>'+(v.barrio||"")+" — "+(v.direccion||"")+'</td></tr></table>'
+    +(rf.fprev?'<img class="fp" src="'+rf.fprev+'" alt="Foto del problema" style="margin-top:10px">':"")
+    +'</div>'
+    +'<button class="btn bp blg bbl" onclick="subReclamo()">✅ &nbsp;Enviar y Registrar Reclamo</button>'
+    +'<button class="btn bo bbl" style="margin-top:8px" onclick="prevS()">Corregir datos</button>'
+    +'</div>';
+  }
+  return "";
+}
+
+function pgConf(){
+  var r=S.lastR;if(!r)return pgLanding();
+  var cat=gc(r.cat);var sc=si(r.cat);
+  var pasos=PASOS[r.cat]||["Recepción","Evaluación","Resolución","Cierre"];
+  return nav("Reclamo Registrado","vecino-home")+'<div class="nw">'
+  +'<div style="text-align:center;padding:24px 0 16px"><div style="font-size:48px;margin-bottom:12px">✅</div>'
+  +'<h2 style="font-size:19px;font-weight:700;margin-bottom:6px">¡Reclamo registrado y visible!</h2>'
+  +'<p style="color:var(--t2);font-size:13px">Tu problema está documentado. El área responsable tiene la obligación de resolverlo.</p></div>'
+  +'<div class="cb"><div style="font-size:11px;color:var(--t2);margin-bottom:8px;text-transform:uppercase;letter-spacing:1px;font-weight:700">Código de seguimiento</div>'
+  +'<div class="cbv">'+r.codigo+'</div><div style="font-size:11px;color:var(--t2);margin-top:8px">Guardá este código para seguir cada etapa</div></div>'
+  +'<div class="card" style="margin-bottom:10px"><div style="background:'+sc.lt+';border-radius:8px;padding:12px;border:1px solid '+sc.color+'33">'
+  +'<div style="font-size:13px;font-weight:700;color:'+sc.color+';margin-bottom:4px">📤 '+sc.label+'</div>'
+  +'<div style="font-size:12px;color:'+sc.color+'">'+cat.sub+' → '+cat.area+'</div>'
+  +'<div style="font-size:12px;color:'+sc.color+';margin-top:6px">⏱ Tiempo estimado: <strong>'+cat.t+'</strong></div>'
+  +'</div></div>'
+  +'<div class="card" style="margin-bottom:14px"><div class="sl">Próximas etapas</div>'
+  +'<div style="margin-top:10px;display:flex;flex-direction:column;gap:8px">'
+  +pasos.map(function(p,i){
+    return'<div style="display:flex;align-items:center;gap:10px"><div style="min-width:22px;height:22px;border-radius:50%;background:'+(i===0?"var(--g)":"var(--bg)")+';color:'+(i===0?"white":"var(--t2)")+';display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700">'+(i+1)+'</div>'
+    +'<span style="font-size:13px;'+(i===0?"font-weight:700;color:var(--g)":"")+'">' +p+'</span>'
+    +(i===0?'<span class="bdg" style="background:var(--gl);color:var(--g);margin-left:auto;font-size:10px">Ahora</span>':"")+'</div>';
+  }).join('')+'</div></div>'
+  +'<div style="display:flex;gap:8px">'
+  +'<button class="btn bo" style="flex:1;justify-content:center" onclick="go(\'tracking\')">🔍 Seguir reclamo</button>'
+  +'<button class="btn bp" style="flex:1;justify-content:center" onclick="go(\'vecino-home\')">+ Nuevo reclamo</button>'
+  +'</div></div>';
+}
+
+function pgTrack(){
+  return '<button class="accbtn" onclick="toggleAcc()">'+(S.acc?"🔡":"🔤")+"</button>"
+  +return nav("Seguimiento","vecino-home")+'<div class="nw">'
+  +'<h2 style="font-size:18px;font-weight:700;margin:14px 0 4px">Seguí tu reclamo</h2>'
+  +'<p style="color:var(--t2);font-size:13px;margin-bottom:14px">Ingresá tu código o DNI</p>'
+  +'<div class="card" style="margin-bottom:14px">'
+  +'<div class="g2" style="margin-bottom:10px">'
+  +'<div class="fg" style="margin-bottom:0"><label>Código de reclamo</label><input type="text" id="tc" value="'+S.tc+'" placeholder="SMA-XXXXXXXX" style="text-transform:uppercase" oninput="S.tc=this.value"></div>'
+  +'<div class="fg" style="margin-bottom:0"><label>O buscar por DNI</label><input type="text" id="td" value="'+S.td+'" placeholder="Número de DNI" oninput="S.td=this.value"></div>'
+  +'</div><button class="btn bp bbl" onclick="doTrack()">🔍 Buscar reclamo</button>'
+  +(S.tE?'<p style="color:var(--r);font-size:12px;margin-top:8px">⚠️ '+S.tE+'</p>':"")
+  +'</div>'+(S.tR?trkResult(S.tR):"")+'</div>';
+}
+
+function trkResult(r){
+  var cat=gc(r.cat);var est=EC[r.estado]||EC.nuevo;var sc=si(r.cat);
+  var pasos=PASOS[r.cat]||["Recepción","Evaluación","Resolución","Cierre"];
+  var sO=["nuevo","en_revision","en_proceso","resuelto","cerrado"];
+  var ci=sO.indexOf(r.estado);var fr=ci/(sO.length-1);
+  var fv=gf(r.id,"v");var fo=gf(r.id,"o");
+  return'<div class="card" style="margin-bottom:10px">'
+  +'<div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px;margin-bottom:10px">'
+  +'<div><div style="font-size:11px;color:var(--t2)">Reclamo '+r.codigo+'</div><div style="font-size:15px;font-weight:700;margin-top:2px">'+cat.icon+' '+cat.name+'</div></div>'
+  +'<div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px">'+bdg(r.estado)+' '+pbdg(r.prioridad)+'</div></div>'
+  +'<p style="font-size:12px;color:var(--t2);margin-bottom:8px">'+r.desc+'</p>'
+  +(fv?'<img class="fp" src="'+fv+'" alt="Foto del vecino" style="margin-bottom:8px"><div style="font-size:10px;color:var(--t2);margin-bottom:8px">📸 Foto aportada por el vecino</div>':"")
+  +'<div style="font-size:11px;color:var(--t2)">📍 '+(r.ub||"San Martín de los Andes")+' &nbsp;·&nbsp; 📅 '+fds(r.fechaCreacion)+'</div></div>'
+  +'<div class="card" style="margin-bottom:10px"><div class="sl">Estado y área responsable</div>'
+  +'<div style="background:'+sc.lt+';border-radius:8px;padding:10px 12px;margin-top:8px;border:1px solid '+sc.color+'33">'
+  +'<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><div style="width:10px;height:10px;border-radius:50%;background:'+est.c+'"></div><span style="font-size:14px;font-weight:700;color:'+est.c+'">'+est.l+'</span></div>'
+  +'<div style="font-size:12px;color:'+sc.color+';font-weight:600">'+sc.label+'</div>'
+  +'<div style="font-size:11px;color:'+sc.color+'">&nbsp;↳ '+cat.sub+' → '+cat.area+'</div>'
+  +'<div style="font-size:12px;color:'+sc.color+';margin-top:6px">⏱ '+cat.t+'</div></div></div>'
+  +'<div class="card" style="margin-bottom:10px"><div class="sl">Progreso</div>'
+  +'<div style="margin-top:12px;display:flex;flex-direction:column;gap:8px">'
+  +pasos.map(function(p,i){var pos=i/Math.max(pasos.length-1,1);var done=pos<fr;var act=Math.round(fr*(pasos.length-1))===i;
+  return'<div style="display:flex;align-items:center;gap:10px"><div style="min-width:22px;height:22px;border-radius:50%;background:'+(act?"var(--g)":done?"var(--gl)":"var(--bg)")+';color:'+(act?"white":done?"var(--g)":"var(--t2)")+';display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;border:1px solid '+(act?"var(--g)":done?"var(--g)":"var(--bd)")+'">'+(done||act?"✓":i+1)+'</div>'
+  +'<span style="font-size:12px;'+(act?"font-weight:700;color:var(--g)":done?"color:#1E8449;text-decoration:line-through":"")+'">' +p+'</span>'
+  +(act?'<span class="bdg" style="background:var(--gl);color:var(--g);margin-left:auto;font-size:10px">Etapa actual</span>':"")
+  +'</div>';}).join('')+'</div></div>'
+  +(fo?'<div class="card" style="margin-bottom:10px;background:#E8F8EF;border-color:rgba(59,109,17,.2)">'
+  +'<div class="sl" style="color:#1E8449">✅ Foto del trabajo realizado por la cuadrilla</div>'
+  +'<img class="fop" src="'+fo+'" alt="Trabajo realizado">'
+  +'<div style="font-size:11px;color:#1E8449;margin-top:6px">Documentación del operador municipal</div></div>':"")
+  +'<div class="card" style="margin-bottom:10px"><div class="sl">Historial</div>'
+  +'<ul class="tl" style="margin-top:10px">'
+  +[].concat(r.historial).reverse().map(function(h){var e=EC[h.e]||EC.nuevo;
+  return'<li class="tli"><div class="tld" style="background:'+e.bg+';border:1px solid '+e.c+'"><span style="font-size:8px;color:'+e.c+'">●</span></div>'
+  +'<div class="tlb"><div class="tlw">'+fd(h.f)+' · '+h.op+'</div><div class="tlwh" style="color:'+e.c+'">'+e.l+'</div><div class="tln">'+h.n+'</div></div></li>';}).join('')
+  +'</ul></div>'
+  +'<div style="background:#F3E8FA;border:1px solid #7D3FAB33;border-radius:10px;padding:12px 14px;margin-bottom:10px;cursor:pointer" onclick="sumarme(\''+r.id+'\')">'
+  +(S._myVotes[r.id]
+    ?'<div style="display:flex;align-items:center;gap:10px"><span style="font-size:22px">🙌</span><div><div style="font-size:13px;font-weight:700;color:var(--p)">¡Ya te sumaste!</div><div style="font-size:11px;color:var(--t2)">Tu voto ayuda a priorizar la solución</div></div></div>'
+    :'<div style="display:flex;align-items:center;gap:10px"><span style="font-size:22px">📢</span><div style="flex:1"><div style="font-size:13px;font-weight:700;color:var(--p)">¿Tenés el mismo problema?</div><div style="font-size:11px;color:var(--t2)">Sumate al reclamo para darle más peso</div></div><div style="text-align:right"><div style="font-size:22px;font-weight:700;color:var(--p)">'+(r.votos||0)+'</div><div style="font-size:10px;color:var(--t2)">vecinos</div></div></div>')
+  +'</div>'
+  +(r.estado==="resuelto"&&!r.encuesta?'<div class="card" style="background:#E8F8EF;border-color:rgba(59,109,17,.25);margin-bottom:10px">'
+  +'<p style="font-size:13px;color:#1E8449;font-weight:700;margin-bottom:8px">🎉 ¡Resuelto! ¿Se solucionó realmente?</p>'
+  +'<button class="btn bp bbl" onclick="goEnc(\''+r.id+'\')">⭐ Completar encuesta de satisfacción</button></div>':"")
+  +(r.encuesta?'<div class="card" style="background:var(--pl);border-color:rgba(83,74,183,.25)">'
+  +'<div style="font-size:12px;font-weight:700;color:var(--p);margin-bottom:6px">Tu valoración</div>'
+  +'<div style="display:flex;gap:3px;margin-bottom:4px">'+[1,2,3,4,5].map(function(i){return'<span style="font-size:18px">'+(i<=r.encuesta.cal?"⭐":"☆")+'</span>';}).join("")+'</div>'
+  +'<div style="font-size:12px;color:var(--t2)">"'+r.encuesta.com+'"</div></div>':"");
+}
+
+function pgEnc(){
+  var r=S.sR;if(!r){go("vecino-home");return"";}
+  return nav("Encuesta","tracking")+'<div class="nw">'
+  +'<div style="text-align:center;padding:24px 0 16px"><div style="font-size:40px;margin-bottom:12px">⭐</div>'
+  +'<h2 style="font-size:18px;font-weight:700;margin-bottom:6px">¿Se resolvió tu problema?</h2>'
+  +'<p style="color:var(--t2);font-size:13px">Tu experiencia queda documentada. La gestión tiene que rendir cuentas.</p></div>'
+  +'<div class="card"><div style="text-align:center;margin-bottom:20px">'
+  +'<div style="font-size:13px;color:var(--t2);margin-bottom:10px">¿Quedaste conforme con la solución?</div>'
+  +'<div style="display:flex;justify-content:center;gap:4px">'+[1,2,3,4,5].map(function(i){return'<button class="sb'+(S.sRat>=i?" on":"")+'" onclick="setRat('+i+')">'+(S.sRat>=i?"⭐":"☆")+'</button>';}).join("")+'</div>'
+  +'<div style="font-size:12px;color:var(--t2);margin-top:6px;font-weight:600">'+["","Muy insatisfecho","Insatisfecho","Regular","Conforme","Muy conforme"][S.sRat]+'</div></div>'
+  +'<div class="fg"><label>Comentario (opcional)</label><textarea id="scom" rows="3" placeholder="¿Se resolvió realmente? ¿En qué tiempo?">'+(S.sCom||"")+'</textarea></div>'
+  +'<button class="btn bp bbl" onclick="subEnc()"'+(S.sRat?"":" disabled")+'>Enviar valoración</button>'
+  +'</div></div>';
+}
+
+// ---- ADMIN PAGES ----
+function pgDash(){
+  var rs=S.reclamos;var tot=rs.length;
+  var nv=rs.filter(function(r){return r.estado==="nuevo";}).length;
+  var ep=rs.filter(function(r){return r.estado==="en_proceso"||r.estado==="en_revision";}).length;
+  var res=rs.filter(function(r){return r.estado==="resuelto"||r.estado==="cerrado";}).length;
+  var tasa=tot>0?Math.round(res/tot*100):0;
+  var byCat=CATS.map(function(c){return{c:c,n:rs.filter(function(r){return r.cat===c.id;}).length};}).filter(function(x){return x.n>0;}).sort(function(a,b){return b.n-a.n;});
+  var maxC=byCat[0]?byCat[0].n:1;
+  var byB=BARRIOS.map(function(b){return{b:b,n:rs.filter(function(r){return r.v&&r.v.barrio===b;}).length};}).filter(function(x){return x.n>0;}).sort(function(a,b){return b.n-a.n;});
+  var maxB=byB[0]?byB[0].n:1;
+  var withS=rs.filter(function(r){return r.encuesta;});
+  var avg=withS.length>0?(withS.reduce(function(a,r){return a+r.encuesta.cal;},0)/withS.length).toFixed(1):"—";
+  var crit=[];
+  BARRIOS.forEach(function(b){
+    var pen=rs.filter(function(r){return r.v&&r.v.barrio===b&&r.estado!=="resuelto"&&r.estado!=="cerrado";});
+    if(pen.length>=2){var cats={};pen.forEach(function(r){cats[r.cat]=(cats[r.cat]||0)+1;});var top=Object.entries(cats).sort(function(a,b){return b[1]-a[1];})[0];if(top)crit.push({barrio:b,total:pen.length,cat:top[0],n:top[1]});}
+  });
+  crit.sort(function(a,b){return b.total-a.total;});
+  return anav()+'<div class="ct">'
+  +'<div style="display:flex;justify-content:space-between;align-items:center;margin:14px 0 12px;flex-wrap:wrap;gap:8px">'
+  +'<h2 style="font-size:17px;font-weight:700">Resumen general</h2>'
+  +'<div style="display:flex;gap:8px"><button class="btn bp bsm" onclick="go(\'admin-mapa\')">🗺 Mapa en vivo</button>'
+  +'<button class="btn bo bsm" onclick="go(\'admin-reporte\')">📄 Reporte semanal</button></div></div>'
+  +'<div class="g4" style="margin-bottom:14px">'
+  +'<div class="st"><div class="stn">'+tot+'</div><div class="stl">Total</div></div>'
+  +'<div class="st" style="background:#FAEEDA"><div class="stn" style="color:var(--a)">'+nv+'</div><div class="stl">Sin atender</div></div>'
+  +'<div class="st" style="background:#EEEDFE"><div class="stn" style="color:var(--p)">'+ep+'</div><div class="stl">En proceso</div></div>'
+  +'<div class="st" style="background:#E8F8EF"><div class="stn" style="color:#1E8449">'+tasa+'%</div><div class="stl">Resolución</div></div>'
+  +'</div>'
+  +(crit.length>0?'<div class="card" style="margin-bottom:12px;border-left:3px solid var(--r);border-radius:0 12px 12px 0">'
+  +'<div style="display:flex;align-items:center;gap:7px;margin-bottom:10px"><span>🚨</span>'
+  +'<div class="sl" style="margin:0;color:var(--r)">Puntos Críticos sin resolver</div>'
+  +'<button class="btn bsm np" style="background:var(--r);color:white;margin-left:auto" onclick="go(\'admin-mapa\')">Ver en mapa</button></div>'
+  +'<div style="display:flex;flex-direction:column;gap:7px">'
+  +crit.slice(0,5).map(function(c){var cat=gc(c.cat);var sc=si(c.cat);
+  return'<div style="display:flex;align-items:center;justify-content:space-between;padding:8px 10px;background:var(--rl);border-radius:8px;flex-wrap:wrap;gap:6px">'
+  +'<div><span style="font-size:13px;font-weight:700;color:var(--r)">'+c.barrio+'</span>'
+  +'<span style="font-size:12px;color:#791F1F"> · '+cat.icon+' '+cat.name+' ('+c.n+' casos)</span></div>'
+  +'<span class="bdg" style="background:#F7C1C1;color:#791F1F">'+c.total+' pendientes</span></div>';}).join('')
+  +'</div></div>':"")
+  +'<div class="g2" style="margin-bottom:12px">'
+  +'<div class="card"><div class="sl">Por tipo de reclamo</div><div style="margin-top:10px">'
+  +byCat.slice(0,6).map(function(x){var sc=si(x.c.id);return'<div class="brr"><div class="brl">'+x.c.icon+' '+x.c.name+'</div><div class="brt"><div class="brf" style="width:'+Math.round(x.n/maxC*100)+'%;background:'+sc.color+'"></div></div><div class="brr" style="min-width:18px">'+x.n+'</div></div>';}).join('')
+  +'</div></div>'
+  +'<div class="card"><div class="sl">Por secretaría</div><div style="margin-top:10px;display:flex;flex-direction:column;gap:8px">'
+  +Object.entries(SECS).map(function(e){var k=e[0];var v=e[1];
+  var n=rs.filter(function(r){return gc(r.cat).sec===k;}).length;
+  var pen=rs.filter(function(r){return gc(r.cat).sec===k&&r.estado!=="resuelto"&&r.estado!=="cerrado";}).length;
+  return'<div style="display:flex;align-items:center;gap:8px"><div style="width:12px;height:12px;border-radius:50%;background:'+v.color+';flex-shrink:0"></div>'
+  +'<div style="flex:1"><div style="font-size:12px;font-weight:700;color:'+v.color+'">'+v.label+'</div>'
+  +'<div style="font-size:11px;color:var(--t2)">'+n+' total · '+pen+' pendientes</div></div>'
+  +'<div style="font-size:16px;font-weight:700">'+n+'</div></div>';}).join('')
+  +'</div></div></div>'
+  +'<div class="card"><div class="sl">Satisfacción vecinal</div>'
+  +'<div style="text-align:center;padding:10px 0"><div style="font-size:32px;font-weight:700;color:var(--g)">'+avg+(avg!=="—"?"/5":"")+'</div>'
+  +'<div style="font-size:18px;margin:4px 0">'+(avg!=="—"?[1,2,3,4,5].map(function(i){return i<=Math.round(parseFloat(avg))?"⭐":"☆";}).join(""):"☆☆☆☆☆")+'</div>'
+  +'<div style="font-size:11px;color:var(--t2)">'+withS.length+' encuestas completadas</div>'
+  +'</div></div></div>';
+}
+
+function pgMapa(){
+  var rs=S.reclamos.filter(function(r){return r.lat&&r.lng;});
+  var sinAt=rs.filter(function(r){return r.estado==="nuevo";}).length;
+  var hp=rs.filter(function(r){return r.prioridad==="alta"&&r.estado!=="resuelto"&&r.estado!=="cerrado";}).length;
+  var filt=S.mF==="todos"?rs:rs.filter(function(r){return r.estado===S.mF;});
+  if(S.mC!=="todas")filt=filt.filter(function(r){return r.cat===S.mC;});
+  return anav()+'<div class="ct">'
+  +'<div style="display:flex;justify-content:space-between;align-items:center;margin:14px 0 10px;flex-wrap:wrap;gap:8px">'
+  +'<h2 style="font-size:17px;font-weight:700">Mapa de reclamos en tiempo real</h2>'
+  +'<div style="display:flex;gap:8px;flex-wrap:wrap">'
+  +'<button id="hbtn" class="btn bsm '+(S.mH?"bp":"bo")+'" onclick="togH()">🔥 '+(S.mH?"Ocultar":"Mostrar")+' zonas calientes</button>'
+  +'<select style="padding:5px 8px;border:1px solid var(--bd);border-radius:7px;font-size:12px;background:#fff" onchange="S.mMode=this.value;rfMap()">'
+  +'<option value="sec"'+(S.mMode==="sec"?" selected":"")+'>Color: Secretaría</option>'
+  +'<option value="est"'+(S.mMode==="est"?" selected":"")+'>Color: Estado</option>'
+  +'<option value="prio"'+(S.mMode==="prio"?" selected":"")+'>Color: Prioridad</option>'
+  +'</select></div></div>'
+  +'<div class="g4" style="margin-bottom:10px">'
+  +'<div class="st"><div class="stn">'+rs.length+'</div><div class="stl">En el mapa</div></div>'
+  +'<div class="st" style="background:#FAEEDA"><div class="stn" style="color:var(--a)">'+sinAt+'</div><div class="stl">Sin atender</div></div>'
+  +'<div class="st" style="background:var(--rl)"><div class="stn" style="color:var(--r)">'+hp+'</div><div class="stl">Alta prioridad</div></div>'
+  +'<div class="st" style="background:#EEEDFE"><div class="stn" style="color:var(--p)">'+filt.length+'</div><div class="stl">Mostrando</div></div>'
+  +'</div>'
+  +'<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px;align-items:center">'
+  +["todos","nuevo","en_revision","en_proceso","resuelto"].map(function(e){
+  var lbl=e==="todos"?"Todos":EC[e]?EC[e].l:e;
+  var cnt=e==="todos"?rs.length:rs.filter(function(r){return r.estado===e;}).length;
+  return'<button class="btn bsm '+(S.mF===e?"bp":"bo")+'" onclick="S.mF=\''+e+'\';rfMap()">'+lbl+' ('+cnt+')</button>';}).join("")
+  +'<select style="padding:5px 8px;border:1px solid var(--bd);border-radius:7px;font-size:12px;background:#fff;margin-left:auto" onchange="S.mC=this.value;rfMap()">'
+  +'<option value="todas">Todas las categorías</option>'
+  +CATS.map(function(c){return'<option value="'+c.id+'"'+(S.mC===c.id?" selected":"")+'>'+c.icon+' '+c.name+'</option>';}).join("")
+  +'</select></div>'
+  +'<div id="lmap" style="height:500px"></div>'
+  +'<div class="mleg">'
+  +(S.mMode==="sec"?Object.entries(SECS).map(function(e){return'<span><span style="display:inline-block;width:11px;height:11px;border-radius:50%;background:'+e[1].color+';margin-right:4px;vertical-align:-1px"></span>'+e[1].label+'</span>';}).join(""):"")
+  +(S.mMode==="est"?Object.entries(EC).map(function(e){return'<span><span style="display:inline-block;width:11px;height:11px;border-radius:50%;background:'+e[1].c+';margin-right:4px;vertical-align:-1px"></span>'+e[1].l+'</span>';}).join(""):"")
+  +(S.mMode==="prio"?'<span><span style="display:inline-block;width:11px;height:11px;border-radius:50%;background:#D4791A;margin-right:4px;vertical-align:-1px"></span>Alta</span>'
+  +'<span><span style="display:inline-block;width:11px;height:11px;border-radius:50%;background:#1A6BAD;margin-right:4px;vertical-align:-1px"></span>Media</span>'
+  +'<span><span style="display:inline-block;width:11px;height:11px;border-radius:50%;background:#3B6D11;margin-right:4px;vertical-align:-1px"></span>Baja</span>':"")
+  +'<span style="margin-left:auto;color:var(--t2);font-size:10px">Marcadores grandes = alta prioridad · Clic para detalle</span>'
+  +'</div></div>';
+}
+
+function initMap(){
+  if(!window.L){setTimeout(initMap,250);return;}
+  var el=document.getElementById("lmap");if(!el)return;
+  if(_map){try{_map.remove();}catch(e){}_map=null;}
+  _map=L.map("lmap",{center:[-40.1567,-71.3525],zoom:13});
+  var osm=L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{attribution:"© OpenStreetMap",maxZoom:19});
+  var sat=L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",{attribution:"© Esri",maxZoom:19});
+  osm.addTo(_map);
+  L.control.layers({"🗺 Calles":osm,"🛰 Satélite":sat},{},{position:"topright"}).addTo(_map);
+  rfMap();
+}
+
+function rfMap(){
+  if(!window.L||!_map)return;
+  _mk.forEach(function(m){_map.removeLayer(m);});_mk=[];
+  if(_hl){try{_map.removeLayer(_hl);}catch(e){}_hl=null;}
+  var rs=S.reclamos.filter(function(r){return r.lat&&r.lng;});
+  var filt=S.mF==="todos"?rs:rs.filter(function(r){return r.estado===S.mF;});
+  if(S.mC!=="todas")filt=filt.filter(function(r){return r.cat===S.mC;});
+  var hd=[];
+  filt.forEach(function(r){
+    var cat=gc(r.cat);var est=EC[r.estado]||EC.nuevo;var sc=si(r.cat);
+    var color=S.mMode==="sec"?sc.color:S.mMode==="est"?est.c:r.prioridad==="alta"?"#D4791A":r.prioridad==="media"?"#1A6BAD":"#1E8449";
+    var rad=r.prioridad==="alta"?12:r.prioridad==="media"?9:7;
+    var fv=gf(r.id,"v");
+    var mk=L.circleMarker([r.lat,r.lng],{radius:rad,fillColor:color,color:"#fff",weight:2.5,opacity:1,fillOpacity:0.9});
+    var pop='<div style="min-width:210px;font-family:-apple-system,sans-serif">'
+      +'<div style="font-size:14px;font-weight:700;margin-bottom:3px">'+cat.icon+' '+cat.name+'</div>'
+      +'<div style="font-size:11px;margin-bottom:5px"><span style="background:'+sc.lt+';color:'+sc.color+';padding:1px 7px;border-radius:20px;font-size:10px;font-weight:700">'+sc.label+'</span></div>'
+      +'<div style="font-size:12px;color:#555;margin-bottom:5px">👤 '+r.v.nom+' · 📍 '+r.v.barrio+'</div>'
+      +'<div style="margin-bottom:6px">'+bdg(r.estado)+' '+pbdg(r.prioridad)+'</div>'
+      +'<div style="font-size:11px;color:#666;margin-bottom:6px;line-height:1.4">'+r.desc.substring(0,90)+(r.desc.length>90?"...":"")+'</div>'
+      +(fv?'<img src="'+fv+'" style="width:100%;border-radius:6px;margin-bottom:6px;max-height:90px;object-fit:cover">':'')
+      +'<button onclick="vrMap(\''+r.id+'\')" style="background:#0F6E56;color:white;border:none;padding:6px 14px;border-radius:7px;font-size:12px;cursor:pointer;width:100%;font-weight:600">Ver detalle →</button></div>';
+    mk.bindPopup(pop,{maxWidth:260});
+    mk.addTo(_map);_mk.push(mk);
+    hd.push([r.lat,r.lng,r.prioridad==="alta"?1:r.prioridad==="media"?0.6:0.3]);
+  });
+  if(S.mH&&window.L.heatLayer&&hd.length>0){
+    _hl=L.heatLayer(hd,{radius:35,blur:25,maxZoom:16,gradient:{0.3:"#ffffb2",0.55:"#fecc5c",0.7:"#fd8d3c",0.85:"#f03b20",1.0:"#bd0026"}});
+    _hl.addTo(_map);
+  }
+}
+
+function togH(){
+  S.mH=!S.mH;rfMap();
+  var btn=document.getElementById("hbtn");
+  if(btn){btn.textContent=(S.mH?"🔥 Ocultar":"🔥 Mostrar")+" zonas calientes";btn.className="btn bsm "+(S.mH?"bp":"bo");}
+}
+function vrMap(id){S.selR=S.reclamos.find(function(r){return r.id===id;});S.nE="";S.nN="";S.page="admin-detail";render();}
+
+function pgClaims(){
+  var rs=[].concat(S.reclamos);
+  if(S.aF!=="todos")rs=rs.filter(function(r){return r.estado===S.aF;});
+  if(S.aC!=="todas")rs=rs.filter(function(r){return r.cat===S.aC;});
+  return anav()+'<div class="ct">'
+  +'<div style="display:flex;gap:7px;flex-wrap:wrap;margin:14px 0 10px;align-items:center">'
+  +["todos","nuevo","en_revision","en_proceso","resuelto","cerrado"].map(function(e){
+  var lbl=e==="todos"?"Todos":EC[e]?EC[e].l:e;
+  var cnt=e==="todos"?S.reclamos.length:S.reclamos.filter(function(r){return r.estado===e;}).length;
+  return'<button class="btn bsm '+(S.aF===e?"bp":"bo")+'" onclick="S.aF=\''+e+'\';render()">'+lbl+' ('+cnt+')</button>';}).join("")
+  +'<select style="margin-left:auto;padding:6px 8px;border:1px solid var(--bd);border-radius:7px;font-size:12px;background:#fff" onchange="S.aC=this.value;render()">'
+  +'<option value="todas">Todas las categorías</option>'
+  +CATS.map(function(c){return'<option value="'+c.id+'"'+(S.aC===c.id?" selected":"")+'>'+c.name+'</option>';}).join("")
+  +'</select></div>'
+  +'<div class="card" style="padding:0"><div class="tw"><table>'
+  +'<thead><tr><th style="width:110px">Código</th><th style="width:130px">Vecino</th><th>Tipo</th><th style="width:110px">Barrio</th><th style="width:70px">Sec.</th><th style="width:90px">Estado</th><th style="width:60px">Foto / DNI</th><th style="width:70px">Fecha</th></tr></thead>'
+  +'<tbody>'+(rs.length===0?'<tr><td colspan="8" style="text-align:center;color:var(--t2);padding:24px">Sin reclamos</td></tr>':
+  rs.map(function(r){var c=gc(r.cat);var sc=si(r.cat);var fv=gf(r.id,"v");
+  return'<tr class="row" onclick="vrec(\''+r.id+'\')">'
+  +'<td style="font-family:monospace;font-size:10px">'+r.codigo+'</td>'
+  +'<td>'+(r.v?r.v.nom:"—")+'</td><td>'+c.icon+' '+c.name+'</td><td>'+(r.v?r.v.barrio:"—")+'</td>'
+  +'<td><span style="width:9px;height:9px;border-radius:50%;background:'+sc.color+';display:inline-block"></span></td>'
+  +'<td>'+bdg(r.estado)+'</td>'
+  +'<td style="text-align:center">'+(fv?"📸 ":"")+""+(r.dniVerif?"🪪✅":"🪪⚠️")+'</td>'
+  +'<td style="font-size:11px;color:var(--t2)">'+fds(r.fechaCreacion)+'</td></tr>';}).join(""))
+  +'</tbody></table></div></div></div>';
+}
+
+function pgDetail(){
+  var r=S.selR;if(!r){go("admin-claims");return"";}
+  var cat=gc(r.cat);var sc=si(r.cat);
+  var sO=["nuevo","en_revision","en_proceso","resuelto","cerrado"];
+  var sL={nuevo:"Nuevo",en_revision:"En Revisión",en_proceso:"En Proceso",resuelto:"Resuelto",cerrado:"Cerrado"};
+  var fv=gf(r.id,"v");var fo=gf(r.id,"o");
+  return anav()
+  +'<div style="padding:8px 14px 0;max-width:820px;margin:0 auto"><button class="btn bo bsm" onclick="go(\'admin-claims\')">← Volver</button></div>'
+  +'<div class="ct">'
+  +'<div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px;margin:10px 0 14px">'
+  +'<div><div style="font-size:11px;color:var(--t2)">Reclamo '+r.codigo+'</div>'
+  +'<h2 style="font-size:17px;font-weight:700;margin-top:2px">'+cat.icon+' '+cat.name+'</h2>'
+  +'<div style="margin-top:4px"><span style="background:'+sc.lt+';color:'+sc.color+';padding:2px 10px;border-radius:20px;font-size:11px;font-weight:700">'+sc.label+'</span></div></div>'
+  +'<div style="display:flex;flex-direction:column;gap:5px;align-items:flex-end">'+bdg(r.estado)+' '+pbdg(r.prioridad)+'</div></div>'
+  +'<div class="g2" style="margin-bottom:10px">'
+  +'<div class="card"><div class="sl">Datos del vecino</div>'
+  +'<div style="font-size:12px;margin-top:8px;display:flex;flex-direction:column;gap:3px">'
+  +'<div style="font-weight:700;font-size:13px">'+(r.v?r.v.nom:"—")+'</div>'
+  +'<div style="color:var(--t2)">DNI: '+(r.v?r.v.dni:"")+'</div>'
+  +'<div style="color:var(--t2)">📞 '+(r.v?r.v.tel:"")+'</div>'
+  +'<div style="color:var(--t2)">📍 '+(r.v?r.v.barrio+' — '+r.v.dir:"")+'</div></div></div>'
+  +'<div class="card"><div class="sl">Área responsable</div>'
+  +'<div style="font-size:12px;margin-top:8px;display:flex;flex-direction:column;gap:3px">'
+  +'<div style="font-weight:700;color:'+sc.color+'">'+sc.label+'</div>'
+  +'<div style="color:var(--t2)">'+cat.sub+'</div><div style="color:var(--t2)">'+cat.area+'</div>'
+  +'<div style="margin-top:6px;color:'+sc.color+'">⏱ '+cat.t+'</div>'
+  +(r.lat?'<div style="color:var(--t2)">📍 Georeferenciado</div>':"")
+  +'</div></div></div>'
+  +(r.lat?'<div id="dmap" style="height:180px;border-radius:12px;border:1px solid var(--bd);margin-bottom:10px;z-index:0"></div>':"")
+  +'<div class="card" style="margin-bottom:10px"><div class="sl">Descripción</div>'
+  +'<p style="font-size:13px;margin:8px 0">'+r.desc+'</p>'
+  +'<div style="font-size:12px;color:var(--t2)">📍 '+(r.ub||"—")+' &nbsp;·&nbsp; 📅 '+fd(r.fechaCreacion)+' &nbsp;·&nbsp; '+days(r.fechaCreacion)+' días desde el reclamo</div></div>'
+  +'<div class="card" style="margin-bottom:10px;border:1.5px solid '+(r.dniVerif?"#1E844933":"#7D3FAB55")+';border-left:3px solid '+(r.dniVerif?"#1E8449":"#7D3FAB")+'">'
++'<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;flex-wrap:wrap;gap:6px">'
++'<div class="sl" style="margin:0;color:'+(r.dniVerif?"#1E8449":"#7D3FAB")+'">🪪 Identidad del vecino — Foto DNI</div>'
++(r.dniVerif
+  ?'<span style="background:#E8F8EF;color:#1E8449;padding:2px 10px;border-radius:20px;font-size:11px;font-weight:700">✅ Identidad verificada</span>'
+  :'<button class="btn bsm" style="background:#7D3FAB;color:white" onclick="markDNI(''+r.id+'')">✅ Marcar como verificado</button>')
++'</div>'
++(gf(r.id,"dni")
+  ?'<img src="'+gf(r.id,"dni")+'" style="width:100%;border-radius:8px;max-height:200px;object-fit:cover;margin-bottom:8px" alt="DNI vecino">'
+  +'<div style="font-size:11px;color:var(--t2)">'+(!r.dniVerif?"⚠️ Verificar que el DNI coincide con los datos ingresados: <strong>"+r.v.nom+" — DNI "+r.v.dni+"</strong>":"✅ Identidad confirmada por administración")+'</div>'
+  :'<div style="font-size:12px;color:var(--t2);padding:10px;background:var(--bg);border-radius:8px;text-align:center">⚠️ Sin foto de DNI — reclamo cargado desde versión anterior</div>')
++'</div>'
++(fv?'<div class="card" style="margin-bottom:10px"><div class="sl">📸 Foto del vecino — evidencia del problema</div>'
+
+  +'<img class="fp" src="'+fv+'" alt="Foto vecino" style="margin-top:8px"></div>':"")
+  +'<div class="card" style="margin-bottom:10px;border-left:3px solid '+sc.color+';border-radius:0 12px 12px 0"><div class="sl">Actualizar estado</div>'
+  +'<div style="display:flex;flex-wrap:wrap;gap:7px;margin:10px 0 12px">'
+  +sO.filter(function(e){return e!==r.estado;}).map(function(e){return'<button class="btn bsm '+(S.nE===e?"bp":"bo")+'" onclick="S.nE=\''+e+'\';render()">→ '+sL[e]+'</button>';}).join("")
+  +'</div><div class="fg"><label>Nota de gestión</label>'
+  +'<textarea id="anota" rows="2" placeholder="Describí la acción tomada, quién actuó, resultado...">'+(S.nN||"")+'</textarea></div>'
+  +'<button class="btn bp" onclick="confUpd()"'+(S.nE?"":" disabled")+'>✅ Confirmar actualización</button></div>'
+  +'<div class="card" style="margin-bottom:10px">'
+  +'<div class="sl">📸 Foto de trabajo realizado (cuadrilla / operador)</div>'
+  +'<p style="font-size:12px;color:var(--t2);margin:6px 0 8px">El operador sube la foto como respaldo. El vecino la verá en su seguimiento.</p>'
+  +'<input type="file" accept="image/*" onchange="hFO(this,\''+r.id+'\')">'
+  +(fo?'<img class="fop" src="'+fo+'" alt="Trabajo realizado"><div style="font-size:11px;color:#1E8449;margin-top:6px">✅ Foto de resolución cargada — visible para el vecino</div>'
+  :'<div style="font-size:11px;color:var(--t2);margin-top:6px">Sin foto de resolución aún</div>')
+  +'</div>'
+  +'<div class="card" style="margin-bottom:10px"><div class="sl">Historial completo</div>'
+  +'<ul class="tl" style="margin-top:10px">'
+  +[].concat(r.historial).reverse().map(function(h){var e=EC[h.e]||EC.nuevo;
+  return'<li class="tli"><div class="tld" style="background:'+e.bg+';border:1px solid '+e.c+'"><span style="font-size:8px;color:'+e.c+'">●</span></div>'
+  +'<div class="tlb"><div class="tlw">'+fd(h.f)+' · '+h.op+'</div><div class="tlwh" style="color:'+e.c+'">'+e.l+'</div><div class="tln">'+h.n+'</div></div></li>';}).join("")
+  +'</ul></div>'
+  +(r.encuesta?'<div class="card" style="background:var(--pl);border-color:rgba(83,74,183,.2)">'
+  +'<div class="sl" style="color:var(--p)">Encuesta del vecino</div>'
+  +'<div style="display:flex;gap:3px;margin:8px 0 4px;font-size:18px">'+[1,2,3,4,5].map(function(i){return i<=r.encuesta.cal?"⭐":"☆";}).join("")
+  +'<span style="font-size:14px;font-weight:700;color:var(--p);margin-left:6px">'+r.encuesta.cal+'/5</span></div>'
+  +'<p style="font-size:12px;color:var(--t2)">"'+r.encuesta.com+'"</p></div>':"")
+  +'</div>';
+}
+
+function initDetailMap(r){
+  if(!window.L||!r.lat||!r.lng)return;
+  var el=document.getElementById("dmap");if(!el)return;
+  var sc=si(r.cat);var cat=gc(r.cat);
+  var m=L.map("dmap",{center:[r.lat,r.lng],zoom:16,zoomControl:false,dragging:false,scrollWheelZoom:false});
+  L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",{attribution:"© Esri",maxZoom:19}).addTo(m);
+  L.circleMarker([r.lat,r.lng],{radius:13,fillColor:sc.color,color:"#fff",weight:3,fillOpacity:0.95}).addTo(m).bindPopup(cat.icon+" "+(r.ub||r.v.barrio)).openPopup();
+}
+
+function pgAnalytics(){
+  var rs=S.reclamos;
+  var byCat=CATS.map(function(c){var tot=rs.filter(function(r){return r.cat===c.id;}).length;var pen=rs.filter(function(r){return r.cat===c.id&&r.estado!=="resuelto"&&r.estado!=="cerrado";}).length;return{c:c,tot:tot,pen:pen,tasa:tot>0?Math.round((tot-pen)/tot*100):0};}).filter(function(x){return x.tot>0;}).sort(function(a,b){return b.tot-a.tot;});
+  var byB=BARRIOS.map(function(b){var tot=rs.filter(function(r){return r.v&&r.v.barrio===b;}).length;var pen=rs.filter(function(r){return r.v&&r.v.barrio===b&&r.estado!=="resuelto"&&r.estado!=="cerrado";}).length;return{b:b,tot:tot,pen:pen};}).filter(function(x){return x.tot>0;}).sort(function(a,b){return b.tot-a.tot;});
+  var maxB=byB[0]?byB[0].tot:1;
+  var hp=rs.filter(function(r){return r.prioridad==="alta"&&r.estado!=="resuelto"&&r.estado!=="cerrado";}).length;
+  var tG=rs.length>0?Math.round(rs.filter(function(r){return r.estado==="resuelto"||r.estado==="cerrado";}).length/rs.length*100):0;
+  return anav()+'<div class="ct">'
+  +'<div style="display:flex;justify-content:space-between;align-items:center;margin:14px 0 12px;flex-wrap:wrap;gap:8px">'
+  +'<h2 style="font-size:17px;font-weight:700">Análisis e Inteligencia Territorial</h2>'
+  +(hp>0?'<span class="bdg" style="background:var(--rl);color:var(--r)">🚨 '+hp+' urgentes sin resolver</span>':"")+'</div>'
+  +'<div class="card" style="margin-bottom:12px"><div class="sl" style="margin-bottom:10px">Por categoría — Resuelto vs. Pendiente</div>'
+  +byCat.map(function(x){var sc=si(x.c.id);return'<div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">'
+  +'<div style="min-width:130px;font-size:12px;white-space:nowrap">'+x.c.icon+' '+x.c.name+'</div>'
+  +'<div style="flex:1"><div style="display:flex;height:9px;border-radius:4px;overflow:hidden;background:var(--bg)">'
+  +'<div style="width:'+x.tasa+'%;background:#3B6D11"></div>'
+  +'<div style="flex:1;background:'+(x.pen>0?sc.color:"var(--bg)")+'"></div></div>'
+  +'<div style="font-size:10px;color:var(--t2);margin-top:2px">'+x.tasa+'% resuelto</div></div>'
+  +'<div style="font-size:12px;min-width:70px;text-align:right">'+(x.pen>0?'<span style="color:'+sc.color+';font-weight:700">'+x.pen+' pend.</span>':'<span style="color:#1E8449">OK</span>')+' / '+x.tot+'</div></div>';}).join("")
+  +'</div>'
+  +'<div class="card" style="margin-bottom:12px"><div class="sl" style="margin-bottom:10px">Demanda por barrio</div>'
+  +byB.map(function(x){var r2=x.pen/Math.max(x.tot,1);var clr=r2>0.7?"var(--r)":r2>0.4?"var(--a)":"var(--g)";
+  return'<div style="display:flex;align-items:center;gap:7px;margin-bottom:8px">'
+  +'<div style="min-width:130px;font-size:12px">'+x.b+'</div>'
+  +'<div class="brt" style="flex:1;height:9px"><div class="brf" style="width:'+Math.round(x.tot/maxB*100)+'%;background:'+clr+'"></div></div>'
+  +'<div style="font-size:12px;min-width:85px;text-align:right">'+(x.pen>0?'<span style="color:'+clr+';font-weight:700">'+x.pen+' pend.</span> / ':"")+'<strong>'+x.tot+'</strong></div></div>';}).join("")
+  +'</div>'
+  +'<div class="card" style="background:var(--gl);border-color:rgba(15,110,86,.2)">'
+  +'<div style="display:flex;align-items:center;gap:8px;margin-bottom:10px"><span style="font-size:18px">🎯</span>'
+  +'<div style="font-size:14px;font-weight:700;color:var(--g)">Diagnóstico para la gestión</div></div>'
+  +'<ul style="list-style:none;display:flex;flex-direction:column;gap:6px">'
+  +[byCat[0]?'<strong>'+byCat[0].c.name+'</strong> es el problema más frecuente con '+byCat[0].tot+' reclamos.':null,
+  byB[0]?'<strong>'+byB[0].b+'</strong> concentra la mayor demanda: '+byB[0].tot+' reclamos, '+byB[0].pen+' pendientes.':null,
+  hp>0?'Hay <strong>'+hp+' reclamos de alta prioridad</strong> sin resolver que exigen atención urgente.':null,
+  'Tasa de resolución general: <strong>'+tG+'%</strong>. '+(tG<50?'Crítico: más de la mitad sin resolver.':tG<80?'Nivel medio — margen de mejora.':'Buen desempeño.')].filter(Boolean).map(function(t){
+  return'<li style="font-size:13px;color:#085041;display:flex;gap:8px"><span>→</span><span>'+t+'</span></li>';}).join("")
+  +'</ul></div></div>';
+}
+
+function pgReporte(){
+  var rs=S.reclamos;
+  var ws=new Date();ws.setDate(ws.getDate()-ws.getDay()-1);ws.setHours(0,0,0,0);
+  var isNew=function(r){return new Date(r.fechaCreacion)>=ws;};
+  var isResW=function(r){return(r.estado==="resuelto"||r.estado==="cerrado")&&r.historial.some(function(h){return h.e==="resuelto"&&new Date(h.f)>=ws;});};
+  var nSem=rs.filter(isNew).length;var rSem=rs.filter(isResW).length;
+  var tot=rs.length;var tasa=tot>0?Math.round(rs.filter(function(r){return r.estado==="resuelto"||r.estado==="cerrado";}).length/tot*100):0;
+  var pendC=rs.filter(function(r){return r.estado!=="resuelto"&&r.estado!=="cerrado"&&r.prioridad==="alta";});
+  var resolW=rs.filter(isResW).slice(0,6);
+  var withS=rs.filter(function(r){return r.encuesta;});
+  var avg=withS.length>0?(withS.reduce(function(a,r){return a+r.encuesta.cal;},0)/withS.length).toFixed(1):"—";
+  var hoy=new Date().toLocaleDateString("es-AR",{weekday:"long",year:"numeric",month:"long",day:"numeric"});
+  var fi=ws.toLocaleDateString("es-AR",{day:"2-digit",month:"2-digit"});
+  var ff=new Date().toLocaleDateString("es-AR",{day:"2-digit",month:"2-digit",year:"numeric"});
+  return anav()+'<div class="ct">'
+  +'<div style="display:flex;justify-content:space-between;align-items:center;margin:14px 0 12px;flex-wrap:wrap;gap:8px">'
+  +'<h2 style="font-size:17px;font-weight:700">Reporte Semanal</h2>'
+  +'<button class="btn bo bsm np" onclick="window.print()">🖨️ Imprimir / PDF</button></div>'
+  +'<div class="rh">'
+  +'<div style="font-size:13px;opacity:.8;margin-bottom:6px">🏛️ MUNICIPALIDAD DE SAN MARTÍN DE LOS ANDES</div>'
+  +'<div style="font-size:20px;font-weight:700;margin-bottom:4px">Reporte Semanal de Reclamos Vecinales</div>'
+  +'<div style="font-size:13px;opacity:.85">Semana '+fi+' al '+ff+' &nbsp;·&nbsp; Generado el '+hoy+'</div>'
+  +'<div style="margin-top:10px;font-size:12px;opacity:.75;font-style:italic">"Política transparente, visible y cerca del vecino"</div>'
+  +'</div>'
+  +'<div class="rk">'
+  +'<div class="rki"><div class="rkn">'+nSem+'</div><div class="rkl">Nuevos esta semana</div></div>'
+  +'<div class="rki" style="background:#E8F8EF"><div class="rkn" style="color:#1E8449">'+rSem+'</div><div class="rkl">Resueltos esta semana</div></div>'
+  +'<div class="rki" style="background:#FAEEDA"><div class="rkn" style="color:var(--a)">'+rs.filter(function(r){return r.estado==="nuevo";}).length+'</div><div class="rkl">Sin atender</div></div>'
+  +'<div class="rki"><div class="rkn" style="color:var(--g)">'+tasa+'%</div><div class="rkl">Tasa resolución</div></div>'
+  +'</div>'
+  +'<div style="background:var(--cd);border:1px solid var(--bd);border-radius:12px;padding:18px;margin-bottom:12px">'
+  +'<div class="sl" style="margin-bottom:12px">Por secretaría</div>'
+  +Object.entries(SECS).map(function(e){var k=e[0];var v=e[1];
+  var srs=rs.filter(function(r){return gc(r.cat).sec===k;});
+  var sRes=srs.filter(function(r){return r.estado==="resuelto"||r.estado==="cerrado";}).length;
+  var sPen=srs.filter(function(r){return r.estado!=="resuelto"&&r.estado!=="cerrado";}).length;
+  var tSec=srs.length>0?Math.round(sRes/srs.length*100):0;
+  return'<div style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--bd)">'
+  +'<div style="width:12px;height:12px;border-radius:50%;background:'+v.color+';flex-shrink:0"></div>'
+  +'<div style="flex:1"><div style="font-size:13px;font-weight:700;color:'+v.color+'">'+v.label+'</div>'
+  +'<div style="font-size:11px;color:var(--t2);margin-top:2px">'+srs.length+' total · '+sPen+' pendientes · '+sRes+' resueltos</div></div>'
+  +'<div style="text-align:right"><div style="font-size:16px;font-weight:700;color:'+(tSec>=70?"#1E8449":tSec>=40?"var(--a)":"var(--r)")+'">'+tSec+'%</div>'
+  +'<div style="font-size:10px;color:var(--t2)">resuelto</div></div></div>';}).join("")
+  +'</div>'
+  +(resolW.length>0?'<div style="background:var(--cd);border:1px solid var(--bd);border-radius:12px;padding:18px;margin-bottom:12px">'
+  +'<div class="sl" style="margin-bottom:10px">✅ Compromisos cumplidos esta semana</div>'
+  +resolW.map(function(r){var cat=gc(r.cat);var sc=si(r.cat);var fo=gf(r.id,"o");
+  return'<div class="ci2"><div style="width:32px;height:32px;border-radius:50%;background:#E8F8EF;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0">'+cat.icon+'</div>'
+  +'<div style="flex:1"><div style="font-size:13px;font-weight:700">'+cat.name+' — '+(r.v?r.v.barrio:"")+'</div>'
+  +'<div style="font-size:12px;color:var(--t2);margin-top:2px">'+r.desc.substring(0,80)+'...</div>'
+  +'<div style="font-size:11px;color:var(--t2);margin-top:3px">👤 '+(r.v?r.v.nom:"")+(r.ub?" &nbsp;·&nbsp; 📍 "+r.ub:"")+'</div>'
+  +(fo?'<div style="font-size:11px;color:#1E8449;margin-top:3px">📸 Con foto de resolución</div>':"")
+  +'</div><span class="bdg" style="background:#E8F8EF;color:#1E8449;flex-shrink:0">Resuelto ✓</span></div>';}).join("")
+  +'</div>':"")
+  +(pendC.length>0?'<div style="background:var(--cd);border:1px solid var(--bd);border-left:3px solid var(--r);border-radius:0 12px 12px 0;padding:18px;margin-bottom:12px">'
+  +'<div class="sl" style="color:var(--r);margin-bottom:10px">⏳ Urgentes pendientes — Alta prioridad</div>'
+  +pendC.slice(0,6).map(function(r){var cat=gc(r.cat);var sc=si(r.cat);var d=days(r.fechaCreacion);
+  return'<div class="ci2"><div style="width:32px;height:32px;border-radius:50%;background:var(--rl);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0">'+cat.icon+'</div>'
+  +'<div style="flex:1"><div style="font-size:13px;font-weight:700">'+cat.name+' — '+(r.v?r.v.barrio:"")+'</div>'
+  +'<div style="font-size:12px;color:var(--t2);margin-top:2px">'+r.desc.substring(0,80)+'...</div>'
+  +'<div style="font-size:11px;margin-top:3px"><span style="color:'+sc.color+';font-weight:600">'+sc.label+'</span></div></div>'
+  +'<div style="text-align:right;flex-shrink:0"><div style="font-size:13px;font-weight:700;color:'+(d>14?"var(--r)":"var(--a)")+'">'+d+'d</div>'
+  +'<div style="font-size:10px;color:var(--t2)">esperando</div></div></div>';}).join("")
+  +'</div>':"")
+  +'<div style="background:var(--cd);border:1px solid var(--bd);border-radius:12px;padding:18px;margin-bottom:12px">'
+  +'<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px">'
+  +'<div class="sl" style="margin:0">🤖 Resumen Ejecutivo — Generado por IA</div>'
+  +'<button class="btn bo bsm np" onclick="genRep()"'+(S.repL?" disabled":"")+'>'+(S.repL?"⏳ Generando...":"✨ Generar resumen con IA")+'</button></div>'
+  +'<div id="repN">'+(S.repN?'<div style="font-size:13px;line-height:1.8;color:var(--tx);white-space:pre-wrap">'+S.repN+'</div>'
+  :'<div style="font-size:13px;color:var(--t2);padding:16px;background:var(--bg);border-radius:8px;text-align:center">Clic en "Generar resumen con IA" para obtener un análisis político basado en los datos reales.</div>')+'</div></div>'
+  +'<div style="background:var(--gl);border:1px solid rgba(15,110,86,.2);border-radius:12px;padding:18px">'
+  +'<div style="font-size:13px;font-weight:700;color:var(--g);margin-bottom:8px">💬 Satisfacción vecinal acumulada</div>'
+  +'<div style="display:flex;align-items:center;gap:16px">'
+  +'<div style="font-size:36px;font-weight:700;color:var(--g)">'+avg+(avg!=="—"?"/5":"")+'</div>'
+  +'<div><div style="font-size:18px">'+(avg!=="—"?[1,2,3,4,5].map(function(i){return i<=Math.round(parseFloat(avg))?"⭐":"☆";}).join(""):"—")+'</div>'
+  +'<div style="font-size:12px;color:var(--t2);margin-top:4px">'+withS.length+' vecinos completaron la encuesta</div></div></div>'
+  +'</div></div>';
+}
+
+async function genRep(){
+  S.repL=true;render();
+  try{
+    var rs=S.reclamos;
+    var nv=rs.length;var res=rs.filter(function(r){return r.estado==="resuelto"||r.estado==="cerrado";}).length;
+    var pen=rs.filter(function(r){return r.estado!=="resuelto"&&r.estado!=="cerrado";}).length;
+    var tasa=nv>0?Math.round(res/nv*100):0;
+    var hp=rs.filter(function(r){return r.prioridad==="alta"&&r.estado!=="resuelto"&&r.estado!=="cerrado";}).length;
+    var topCat=CATS.map(function(c){return{n:c.name,t:rs.filter(function(r){return r.cat===c.id;}).length};}).sort(function(a,b){return b.t-a.t;})[0];
+    var topB=BARRIOS.map(function(b){return{b:b,t:rs.filter(function(r){return r.v&&r.v.barrio===b;}).length};}).sort(function(a,b){return b.t-a.t;})[0];
+    var withS=rs.filter(function(r){return r.encuesta;});
+    var avg=withS.length>0?(withS.reduce(function(a,r){return a+r.encuesta.cal;},0)/withS.length).toFixed(1):"s/d";
+    var resp=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:800,messages:[{role:"user",content:"Sos asesor político de un candidato a intendente de San Martín de los Andes, Neuquén, Argentina.\n\nDatos reales del sistema de reclamos vecinales:\n- Total reclamos en el sistema: "+nv+"\n- Resueltos: "+res+" ("+tasa+"% de resolución)\n- Pendientes sin resolver: "+pen+"\n- Alta prioridad sin resolver: "+hp+"\n- Problema más frecuente: "+(topCat?topCat.n:"varios")+"\n- Barrio con más reclamos: "+(topB?topB.b:"varios")+"\n- Satisfacción vecinal promedio: "+avg+"/5\n\nEscribí un resumen ejecutivo de 200-250 palabras. Debe:\n1. Destacar lo que se logró en concreto (hechos, no promesas)\n2. Identificar los problemas urgentes que quedan por resolver\n3. Dar 2-3 mensajes políticos fuertes para comunicar a los vecinos (transparencia, cercanía, gestión real)\n4. Proponer 2 acciones prioritarias para la próxima semana\n5. Tono: directo, honesto, cercano al vecino. Sin lenguaje burocrático.\n\nSin títulos ni bullets, en párrafos fluidos. Usá los datos reales."}]})});
+    var data=await resp.json();S.repN=data.content&&data.content[0]?data.content[0].text:"Error generando el resumen.";
+  }catch(e){S.repN="Error conectando con la IA. Verificá tu conexión.";}
+  S.repL=false;render();
+  var el=document.getElementById("repN");if(el)el.scrollIntoView({behavior:"smooth"});
+}
+
+// ---- ACCIONES ----
+function subReg(e){e.preventDefault();
+  var fd=new FormData(e.target);
+  var dniData=S.vf.dniPhotoData||null;
+  S.vf={nombre:fd.get("nombre"),apellido:fd.get("apellido"),dni:fd.get("dni"),telefono:fd.get("telefono"),email:fd.get("email"),barrio:fd.get("barrio"),direccion:fd.get("direccion"),dniPhotoData:dniData};
+  S.rf={step:1,cat:"",desc:"",ub:"",ai:null,loading:false,lat:null,lng:null,gps:false,fprev:null,fdata:null};
+  S.page="nuevo-reclamo";render();
+}
+function selCat(id){S.rf=Object.assign({},S.rf,{cat:id,ai:null});render();}
+function nextS(){if(S.rf.cat){S.rf.step=2;render();}}
+function prevS(){S.rf.step=Math.max(1,S.rf.step-1);render();}
+function hDNI(input){
+  if(!input.files[0])return;
+  compImg(input.files[0],function(b64){
+    S.vf.dniPhotoData=b64;
+    var prev=document.getElementById("dniPrev");
+    if(prev)prev.innerHTML='<img class="fp" src="'+b64+'" alt="Foto DNI" style="margin-bottom:6px"><div style="font-size:12px;color:#1E8449;font-weight:600">✅ DNI cargado correctamente</div>';
+  });
+}
+function hFV(input){if(!input.files[0])return;compImg(input.files[0],function(b64){S.rf.fdata=b64;S.rf.fprev=b64;var pv=document.createElement("img");pv.className="fp";pv.src=b64;pv.alt="Foto del problema";var parent=input.parentElement;if(parent){var old=parent.querySelector(".fp");if(old)old.remove();parent.appendChild(pv);}});}
+function hFO(input,rid){if(!input.files[0])return;compImg(input.files[0],function(b64){sf(rid,"o",b64);render();if(S.selR&&S.selR.lat)setTimeout(function(){initDetailMap(S.selR);},80);});}
+function subDesc(e){e.preventDefault();var fd=new FormData(e.target);S.rf.desc=fd.get("desc");S.rf.ub=fd.get("ub");S.rf.step=3;render();}
+function subReclamo(){
+  var cat=gc(S.rf.cat);var bc=BC[S.vf.barrio]||[-40.1567,-71.3525];
+  var id=Date.now().toString();
+  var r={id:id,codigo:gcode(),v:Object.assign({},S.vf),cat:S.rf.cat,desc:S.rf.desc,ub:S.rf.ub,
+    lat:S.rf.lat||(bc[0]+rnd()),lng:S.rf.lng||(bc[1]+rnd()),
+    prioridad:cat.p||"media",estado:"nuevo",fechaCreacion:new Date().toISOString(),
+    historial:[{f:new Date().toISOString(),e:"nuevo",n:"Reclamo recibido y registrado.",op:"Sistema"}],encuesta:null,dniVerif:false,votos:0};
+  if(S.rf.fdata)sf(id,"v",S.rf.fdata);
+  if(S.vf.dniPhotoData)sf(id,"dni",S.vf.dniPhotoData);
+  S.reclamos=[r].concat(S.reclamos);S.lastR=r;
+  S.rf={step:1,cat:"",desc:"",ub:"",ai:null,loading:false,lat:null,lng:null,gps:false,fprev:null,fdata:null};
+  sv();S.page="confirmacion";render();
+}
+function getGPS(){
+  if(!navigator.geolocation){alert("Tu navegador no soporta geolocalización.");return;}
+  navigator.geolocation.getCurrentPosition(function(pos){S.rf.lat=pos.coords.latitude;S.rf.lng=pos.coords.longitude;S.rf.gps=true;render();},function(){alert("No se pudo obtener GPS. Se usarán coordenadas del barrio.");});
+}
+function doTrack(){
+  var code=(document.getElementById("tc")||{value:""}).value.trim().toUpperCase();
+  var dni=(document.getElementById("td")||{value:""}).value.trim();
+  if(code){var f=S.reclamos.find(function(r){return r.codigo===code;});if(f){S.tR=f;S.tE="";}else{S.tR=null;S.tE="No se encontró ningún reclamo con ese código.";}}
+  else if(dni){var f2=S.reclamos.filter(function(r){return r.v&&r.v.dni===dni;});if(f2.length){S.tR=f2[0];S.tE=f2.length>1?"Se encontraron "+f2.length+" reclamos. Mostrando el más reciente.":"";}else{S.tR=null;S.tE="No se encontraron reclamos con ese DNI.";}}
+  else{S.tE="Ingresá un código de reclamo o tu DNI.";}
+  render();
+}
+function goEnc(id){S.sR=S.reclamos.find(function(r){return r.id===id;});S.sRat=0;S.sCom="";S.page="encuesta";render();}
+function setRat(n){S.sRat=n;render();}
+function subEnc(){
+  if(!S.sRat||!S.sR)return;
+  var com=(document.getElementById("scom")||{value:""}).value||"";
+  var idx=S.reclamos.findIndex(function(r){return r.id===S.sR.id;});
+  if(idx>=0){S.reclamos[idx]=Object.assign({},S.reclamos[idx],{encuesta:{cal:S.sRat,com:com||"Sin comentario",f:new Date().toISOString()}});sv();S.tR=S.reclamos[idx];}
+  S.page="tracking";render();
+}
+function vrec(id){S.selR=S.reclamos.find(function(r){return r.id===id;});S.nE="";S.nN="";S.page="admin-detail";render();}
+function markDNI(id){
+  var idx=S.reclamos.findIndex(function(r){return r.id===id;});
+  if(idx>=0){
+    S.reclamos[idx].dniVerif=true;
+    S.reclamos[idx].historial.push({f:new Date().toISOString(),e:S.reclamos[idx].estado,n:"Identidad del vecino verificada contra foto de DNI.",op:"Administración"});
+    sv();S.selR=S.reclamos[idx];
+    render();
+    if(S.selR.lat)setTimeout(function(){initDetailMap(S.selR);},80);
+  }
+}
+
+// ── MODO ACCESIBLE ──────────────────────────────────────────────────────────
+function toggleAcc(){
+  S.acc=!S.acc;
+  document.body.classList.toggle("big",S.acc);
+  var btn=document.querySelector(".accbtn");
+  if(btn)btn.textContent=S.acc?"🔡":"🔤";
+  // Re-render landing solo para actualizar el ícono del botón
+  if(S.page==="landing")render();
+}
+
+// ── YO TAMBIÉN ──────────────────────────────────────────────────────────────
+function sumarme(id){
+  if(S._myVotes[id]){alert("Ya te sumaste a este reclamo anteriormente.");return;}
+  var idx=S.reclamos.findIndex(function(r){return r.id===id;});
+  if(idx>=0){
+    S.reclamos[idx].votos=(S.reclamos[idx].votos||0)+1;
+    S._myVotes[id]=true;
+    // Auto-escalar prioridad si hay muchos votos
+    if(S.reclamos[idx].votos>=5&&S.reclamos[idx].prioridad!=="alta"){
+      S.reclamos[idx].prioridad="alta";
+      S.reclamos[idx].historial.push({f:new Date().toISOString(),e:S.reclamos[idx].estado,n:"Prioridad elevada automáticamente: 5 o más vecinos reportaron el mismo problema.",op:"Sistema"});
+    }
+    sv();S.tR=S.reclamos[idx];render();
+  }
+}
+
+// ── MAPA PÚBLICO ─────────────────────────────────────────────────────────────
+function pgPublicMap(){
+  var rs=S.reclamos.filter(function(r){return r.lat&&r.lng;});
+  var tot=rs.length;
+  var res=rs.filter(function(r){return r.estado==="resuelto"||r.estado==="cerrado";}).length;
+  var pen=rs.filter(function(r){return r.estado!=="resuelto"&&r.estado!=="cerrado";}).length;
+  return'<button class="accbtn" onclick="toggleAcc()" title="Modo accesible">'+(S.acc?"🔡":"🔤")+'</button>'
+  +nav("Mapa de problemas del vecindario","landing")
+  +'<div class="ct">'
+  +'<div style="display:flex;justify-content:space-between;align-items:center;margin:14px 0 10px;flex-wrap:wrap;gap:8px">'
+  +'<h2 style="font-size:17px;font-weight:700">¿Qué problemas hay en San Martín?</h2>'
+  +'<button class="btn bp bsm" onclick="go(\'vecino-home\')">+ Reportar un problema</button>'
+  +'</div>'
+  +'<div class="g3" style="margin-bottom:12px">'
+  +'<div class="st"><div class="stn">'+tot+'</div><div class="stl">Problemas reportados</div></div>'
+  +'<div class="st" style="background:#E8F8EF"><div class="stn" style="color:var(--g)">'+res+'</div><div class="stl">Ya resueltos</div></div>'
+  +'<div class="st" style="background:#FAEEDA"><div class="stn" style="color:var(--a)">'+pen+'</div><div class="stl">Pendientes</div></div>'
+  +'</div>'
+  +'<div style="font-size:12px;color:var(--t2);background:var(--al);border-radius:8px;padding:10px 14px;margin-bottom:10px;border:1px solid var(--a)33">'
+  +'💡 Este mapa muestra todos los reclamos activos. Podés ver los problemas de tu barrio y sumarte a los que también te afectan.'
+  +'</div>'
+  +'<div id="pubmap" style="height:480px"></div>'
+  +'<div class="mleg" style="margin-top:10px">'
+  +Object.entries(SECS).map(function(e){return'<span><span style="display:inline-block;width:11px;height:11px;border-radius:50%;background:'+e[1].color+';margin-right:4px;vertical-align:-1px"></span>'+e[1].label+'</span>';}).join("")
+  +'<span style="margin-left:auto;color:var(--t2);font-size:10px">Clic en un punto para ver el detalle</span>'
+  +'</div>'
+  +'<button class="btn bp bbl" style="margin-top:12px" onclick="go(\'vecino-home\')">📢 Reportar un problema nuevo</button>'
+  +'</div>';
+}
+
+function initPubMap(){
+  if(!window.L){setTimeout(initPubMap,200);return;}
+  var el=document.getElementById("pubmap");if(!el)return;
+  if(window._pubMap){try{window._pubMap.remove();}catch(e){}}
+  window._pubMap=L.map("pubmap",{center:[-40.1567,-71.3525],zoom:13});
+  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{attribution:"© OpenStreetMap",maxZoom:19}).addTo(window._pubMap);
+  var sat=L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",{attribution:"© Esri",maxZoom:19});
+  L.control.layers({"🗺 Calles":L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{attribution:"© OSM",maxZoom:19}).addTo(window._pubMap),"🛰 Satélite":sat},{},{position:"topright"});
+  S.reclamos.filter(function(r){return r.lat&&r.lng;}).forEach(function(r){
+    var cat=gc(r.cat);var est=EC[r.estado]||EC.nuevo;var sc=si(r.cat);
+    var rad=r.prioridad==="alta"?12:r.prioridad==="media"?9:7;
+    var color=r.estado==="resuelto"||r.estado==="cerrado"?"#1E8449":sc.color;
+    var mk=L.circleMarker([r.lat,r.lng],{radius:rad,fillColor:color,color:"#fff",weight:2.5,fillOpacity:0.9});
+    mk.bindPopup(
+      '<div style="min-width:200px;font-family:-apple-system,sans-serif">'
+      +'<div style="font-size:14px;font-weight:700;margin-bottom:4px">'+cat.icon+' '+cat.name+'</div>'
+      +'<div style="margin-bottom:6px"><span style="background:'+est.bg+';color:'+est.c+';padding:2px 8px;border-radius:20px;font-size:11px;font-weight:600">'+est.l+'</span></div>'
+      +'<div style="font-size:11px;color:#666;margin-bottom:6px">📍 '+r.v.barrio+'</div>'
+      +'<div style="font-size:12px;color:#333;margin-bottom:8px">'+r.desc.substring(0,80)+(r.desc.length>80?"...":"")+'</div>'
+      +(r.votos>0?'<div style="font-size:12px;color:var(--p);margin-bottom:8px">📢 '+r.votos+' vecinos tienen el mismo problema</div>':"")
+      +'<button onclick="(function(){S.tc=\''+r.codigo+'\';S.page=\'tracking\';render();})()" style="background:#1E8449;color:white;border:none;padding:6px 14px;border-radius:7px;font-size:12px;cursor:pointer;width:100%;font-weight:600">Seguir este reclamo →</button>'
+      +'</div>',
+      {maxWidth:260}
+    );
+    mk.addTo(window._pubMap);
+  });
+}
+
+// ── COMPROMISOS DE CAMPAÑA ────────────────────────────────────────────────────
+function saveCommitments(){try{localStorage.setItem("sma_com",JSON.stringify(S.commitments));}catch(e){}}
+
+function getCommitProgress(c){
+  var rel=S.reclamos.filter(function(r){return(c.barrio==="todos"||r.v.barrio===c.barrio)&&(c.cat==="todas"||r.cat===c.cat);});
+  var res=rel.filter(function(r){return r.estado==="resuelto"||r.estado==="cerrado";}).length;
+  return{total:rel.length,res:res,pct:rel.length>0?Math.round(res/rel.length*100):0};
+}
+
+function pgCommitments(){
+  return anav()+'<div class="ct">'
+  +'<div style="display:flex;justify-content:space-between;align-items:center;margin:14px 0 12px;flex-wrap:wrap;gap:8px">'
+  +'<h2 style="font-size:17px;font-weight:700">🎯 Compromisos del candidato</h2>'
+  +'<button class="btn bp bsm" onclick="document.getElementById(\'newC\').style.display=\'block\'">+ Agregar compromiso</button>'
+  +'</div>'
+  +'<div id="newC" style="display:none" class="card" style="margin-bottom:12px;border-left:3px solid var(--g)">'
+  +'<div class="sl" style="margin-bottom:10px">Nuevo compromiso</div>'
+  +'<form onsubmit="addCommit(event)">'
+  +'<div class="fg"><label>Título del compromiso *</label><input type="text" name="titulo" placeholder=\'Ej: "Arreglar todas las calles del centro"\' required></div>'
+  +'<div class="fg"><label>Descripción</label><textarea name="desc" rows="2" placeholder="Describí el compromiso en detalle..."></textarea></div>'
+  +'<div class="g2">'
+  +'<div class="fg"><label>Barrio</label><select name="barrio"><option value="todos">Todos los barrios</option>'+BARRIOS.map(function(b){return'<option value="'+b+'">'+b+'</option>';}).join("")+'</select></div>'
+  +'<div class="fg"><label>Categoría relacionada</label><select name="cat"><option value="todas">Todas</option>'+CATS.map(function(c){return'<option value="'+c.id+'">'+c.name+'</option>';}).join("")+'</select></div>'
+  +'</div>'
+  +'<div style="display:flex;gap:8px">'
+  +'<button type="submit" class="btn bp">✅ Guardar compromiso</button>'
+  +'<button type="button" class="btn bo" onclick="document.getElementById(\'newC\').style.display=\'none\'">Cancelar</button>'
+  +'</div></form></div>'
+  +(S.commitments.length===0
+    ?'<div class="card" style="text-align:center;padding:32px;color:var(--t2)"><div style="font-size:32px;margin-bottom:8px">🎯</div><p style="font-size:14px">Agregá los compromisos de campaña.<br>El sistema muestra automáticamente el progreso real.</p></div>'
+    :S.commitments.map(function(c){
+      var prog=getCommitProgress(c);
+      var clr=prog.pct>=80?"var(--g)":prog.pct>=50?"var(--a)":"var(--r)";
+      return'<div class="card" style="margin-bottom:10px;border-left:3px solid '+clr+'">'
+      +'<div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px;margin-bottom:8px">'
+      +'<div><div style="font-size:15px;font-weight:700">'+c.titulo+'</div>'
+      +(c.desc?'<div style="font-size:12px;color:var(--t2);margin-top:2px">'+c.desc+'</div>':"")
+      +'<div style="font-size:11px;color:var(--t2);margin-top:4px">📍 '+c.barrio+' &nbsp;·&nbsp; '+( c.cat==="todas"?"Todas las categorías":gc(c.cat).name)+'</div></div>'
+      +'<div style="text-align:right;flex-shrink:0"><div style="font-size:28px;font-weight:700;color:'+clr+'">'+prog.pct+'%</div><div style="font-size:10px;color:var(--t2)">'+prog.res+' de '+prog.total+' resueltos</div></div>'
+      +'</div>'
+      +'<div class="commit-bar"><div class="commit-fill" style="width:'+prog.pct+'%;background:'+clr+'"></div></div>'
+      +'<div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px">'
+      +'<span style="font-size:11px;color:var(--t2)">'+prog.total+' reclamos relacionados encontrados en el sistema</span>'
+      +'<button class="btn bsm" style="background:var(--r);color:white" onclick="delCommit(\''+c.id+'\')">Eliminar</button>'
+      +'</div></div>';
+    }).join(""))
+  +'</div>';
+}
+
+function addCommit(e){
+  e.preventDefault();
+  var fd=new FormData(e.target);
+  var c={id:Date.now().toString(),titulo:fd.get("titulo"),desc:fd.get("desc")||"",barrio:fd.get("barrio"),cat:fd.get("cat"),fecha:new Date().toISOString()};
+  S.commitments=[c].concat(S.commitments);
+  saveCommitments();
+  document.getElementById("newC").style.display="none";
+  e.target.reset();
+  render();
+}
+
+function delCommit(id){
+  if(!confirm("¿Eliminar este compromiso?"))return;
+  S.commitments=S.commitments.filter(function(c){return c.id!==id;});
+  saveCommitments();render();
+}
+
+// ── MAPA LOCALIZACIÓN en paso 2 del reclamo ──────────────────────────────────
+function initLocMap(){
+  if(!window.L){setTimeout(initLocMap,200);return;}
+  var el=document.getElementById("locmap");if(!el)return;
+  if(window._locMap){try{window._locMap.remove();}catch(e){}}
+  var bc=BC[S.vf.barrio]||[-40.1567,-71.3525];
+  var startLat=S.rf.lat||bc[0];var startLng=S.rf.lng||bc[1];
+  window._locMap=L.map("locmap",{center:[startLat,startLng],zoom:15});
+  L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",{attribution:"© Esri",maxZoom:19}).addTo(window._locMap);
+  var mk=L.marker([startLat,startLng],{draggable:true,title:"Arrastrame al lugar del problema"});
+  mk.addTo(window._locMap);
+  mk.bindPopup("📍 Arrastrame al lugar exacto del problema").openPopup();
+  mk.on("dragend",function(e){
+    var pos=e.target.getLatLng();
+    S.rf.lat=pos.lat;S.rf.lng=pos.lng;S.rf.gps=true;
+    var inp=document.getElementById("ubInput");
+    if(inp&&!inp.value)inp.value="Ubicación marcada en el mapa (lat:"+pos.lat.toFixed(4)+", lng:"+pos.lng.toFixed(4)+")";
+  });
+  window._locMap.on("click",function(e){
+    mk.setLatLng(e.latlng);
+    S.rf.lat=e.latlng.lat;S.rf.lng=e.latlng.lng;S.rf.gps=true;
+    var inp=document.getElementById("ubInput");
+    if(inp&&!inp.value)inp.value="Ubicación marcada en el mapa";
+  });
+}
+
+function confUpd(){
+  if(!S.nE||!S.selR)return;
+  var nota=(document.getElementById("anota")||{value:""}).value||"Estado actualizado";
+  var idx=S.reclamos.findIndex(function(r){return r.id===S.selR.id;});
+  if(idx>=0){var up=Object.assign({},S.reclamos[idx],{estado:S.nE,fechaActualizacion:new Date().toISOString(),historial:S.reclamos[idx].historial.concat([{f:new Date().toISOString(),e:S.nE,n:nota,op:"Administración"}])});S.reclamos[idx]=up;S.selR=up;sv();}
+  S.nE="";S.nN="";render();
+  if(S.selR&&S.selR.lat)setTimeout(function(){initDetailMap(S.selR);},80);
+}
+async function aiCat(){
+  var desc=(document.querySelector("textarea[name=desc]")||{value:""}).value||S.rf.desc;
+  if(!desc||desc.length<10){alert("Escribí una descripción antes.");return;}
+  S.rf.loading=true;S.rf.ai=null;render();
+  try{
+    var cl=CATS.map(function(c){return c.id+": "+c.name;}).join(", ");
+    var resp=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:200,messages:[{role:"user",content:"Municipalidad San Martín de los Andes. Categorías: "+cl+"\nVecino: \""+desc+"\"\nJSON sin backticks: {\"categoriaId\":\"id\",\"confianza\":\"alta|media|baja\",\"justificacion\":\"max 10 palabras\"}"}]})});
+    var data=await resp.json();var txt=data.content&&data.content[0]?data.content[0].text:"{}";
+    var parsed=JSON.parse(txt.replace(/```json|```/g,"").trim());
+    var cat=CATS.find(function(c){return c.id===parsed.categoriaId;});
+    if(cat){S.rf.ai=cat.icon+" Sugerida: <strong>"+cat.name+"</strong> ("+parsed.confianza+"). "+parsed.justificacion;if(parsed.confianza==="alta")S.rf.cat=cat.id;}
+    else{S.rf.ai="No se determinó. Seleccioná manualmente.";}
+  }catch(e){S.rf.ai="Error conectando con la IA.";}
+  S.rf.loading=false;render();
+}
+
+// ---- ROUTER ----
+function render(){
+  var root=document.getElementById("root");if(!root)return;
+  var pages={
+    landing:pgLanding,"vecino-home":pgVH,registro:pgReg,"nuevo-reclamo":pgNR,
+    confirmacion:pgConf,tracking:pgTrack,encuesta:pgEnc,
+    dashboard:pgDash,"admin-mapa":pgMapa,"admin-claims":pgClaims,"admin-detail":pgDetail,
+    "admin-analytics":pgAnalytics,"admin-compromisos":pgCommitments,"admin-reporte":pgReporte,"mapa-publico":pgPublicMap
+  };
+  root.innerHTML=(pages[S.page]||pgLanding)();
+  window.scrollTo(0,0);
+  if(S.page==="admin-mapa")setTimeout(initMap,80);
+  if(S.page==="admin-detail"&&S.selR&&S.selR.lat)setTimeout(function(){initDetailMap(S.selR);},80);
+  if(S.page==="mapa-publico")setTimeout(initPubMap,80);
+  if(S.page==="nuevo-reclamo"&&S.rf.step===2)setTimeout(initLocMap,80);
+  // Restaurar modo accesible
+  document.body.classList.toggle("big",S.acc);
+}
+function go(p){S.page=p;render();}
+// ── Auto-routing por URL ──────────────────────────────────────────
+(function(){
+  var params=new URLSearchParams(window.location.search);
+  var hash=window.location.hash;
+  if(params.has("admin")||hash==="#admin"){
+    S.page="dashboard";
+  } else if(params.has("mapa")||hash==="#mapa"){
+    S.page="mapa-publico";
+  } else {
+    S.page="landing";
+  }
+})();
+render();
+</script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet.heat/dist/leaflet-heat.js"></script>
+</body></html>
