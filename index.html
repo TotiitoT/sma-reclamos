@@ -160,7 +160,10 @@ var S={
   sR:null,sRat:0,sCom:"",
   aF:"todos",aC:"todas", selR:null,nE:"",nN:"",
   lastR:null, mF:"todos",mH:false,mC:"todas",mMode:"sec",
-  repN:"",repL:false
+  repN:"",repL:false,
+  acc:false,
+  _myVotes:{},
+  commitments:(function(){try{return JSON.parse(localStorage.getItem("sma_com")||"[]");}catch(e){return[];}}())
 };
 var _map=null,_hl=null,_mk=[];
 var WA_NUM="5492972000000"; // ← Cambiar por número real
@@ -248,7 +251,7 @@ function pgLanding(){
 
 function pgVH(){
   return '<button class="accbtn" onclick="toggleAcc()">'+(S.acc?"🔡":"🔤")+"</button>"
-  +return nav("Portal Vecino","landing")+'<div class="nw">'
+  +nav("Portal Vecino","landing")+'<div class="nw">'
   +'<h2 style="font-size:18px;font-weight:700;margin:16px 0 4px">Hacé visible tu reclamo</h2>'
   +'<p style="color:var(--t2);font-size:13px;margin-bottom:18px">Cada problema registrado es un compromiso de solución</p>'
   +'<div style="display:flex;flex-direction:column;gap:10px">'
@@ -395,7 +398,7 @@ function pgConf(){
 
 function pgTrack(){
   return '<button class="accbtn" onclick="toggleAcc()">'+(S.acc?"🔡":"🔤")+"</button>"
-  +return nav("Seguimiento","vecino-home")+'<div class="nw">'
+  +nav("Seguimiento","vecino-home")+'<div class="nw">'
   +'<h2 style="font-size:18px;font-weight:700;margin:14px 0 4px">Seguí tu reclamo</h2>'
   +'<p style="color:var(--t2);font-size:13px;margin-bottom:14px">Ingresá tu código o DNI</p>'
   +'<div class="card" style="margin-bottom:14px">'
