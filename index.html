@@ -69,7 +69,7 @@ tr.row:hover td{background:#fafaf9;cursor:pointer}
 .gok{background:#E8F8EF;border:1px solid rgba(59,109,17,.3);border-radius:8px;padding:8px 12px;font-size:12px;color:#1E8449;margin-top:6px}
 .fp{width:100%;border-radius:8px;margin-top:6px;max-height:220px;object-fit:cover;border:1px solid var(--bd)}
 .fop{width:100%;border-radius:8px;margin-top:8px;max-height:260px;object-fit:cover;border:2px solid var(--g)}
-#lmap{border-radius:12px;border:1px solid var(--bd);z-index:0}
+#lmap{border-radius:12px;border:1px solid var(--bd);height:500px;min-height:400px}
 .mleg{display:flex;gap:12px;flex-wrap:wrap;margin-top:10px;padding:10px 14px;background:var(--cd);border-radius:8px;border:1px solid var(--bd);font-size:11px;align-items:center}
 .rh{background:var(--g);color:#fff;border-radius:12px;padding:22px;margin-bottom:14px;text-align:center}
 .rk{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:12px}
@@ -160,14 +160,17 @@ var S={
   sR:null,sRat:0,sCom:"",
   aF:"todos",aC:"todas", selR:null,nE:"",nN:"",
   lastR:null, mF:"todos",mH:false,mC:"todas",mMode:"sec",
-  repN:"",repL:false
+  repN:"",repL:false,
+  commitments:(function(){try{var d=JSON.parse(localStorage.getItem("sma_commits"));return(d&&Array.isArray(d))?d:[];}catch(e){return [];}}()),
+  acc:false
 };
 var _map=null,_hl=null,_mk=[];
 var WA_NUM="5492972000000"; // ← Cambiar por número real
 var TEL_DISPLAY="2972-xxxxxxx"; // ← Cambiar por número real
 
 
-function sv(){try{localStorage.setItem("sma5",JSON.stringify(S.reclamos));}catch(e){}}
+function sv(){
+  try{localStorage.setItem("sma_commits",JSON.stringify(S.commitments||[]));}catch(e){}try{localStorage.setItem("sma5",JSON.stringify(S.reclamos));}catch(e){}}
 function gc(id){return CATS.find(function(c){return c.id===id;})||{name:id,icon:"📋",sec:"obras",sub:"",area:"",t:"—",p:"media"};}
 function si(catId){var c=gc(catId);return SECS[c.sec]||SECS.obras;}
 function gcode(){var c="ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",r="SMA-";for(var i=0;i<8;i++)r+=c[Math.floor(Math.random()*c.length)];return r;}
@@ -249,7 +252,7 @@ function pgLanding(){
 
 function pgVH(){
   return '<button class="accbtn" onclick="toggleAcc()">'+(S.acc?"🔡":"🔤")+"</button>"
-  return nav("Portal Vecino","landing")+'<div class="nw">'
+  +nav("Portal Vecino","landing")+'<div class="nw">'
   +'<h2 style="font-size:18px;font-weight:700;margin:16px 0 4px">Hacé visible tu reclamo</h2>'
   +'<p style="color:var(--t2);font-size:13px;margin-bottom:18px">Cada problema registrado es un compromiso de solución</p>'
   +'<div style="display:flex;flex-direction:column;gap:10px">'
@@ -396,7 +399,7 @@ function pgConf(){
 
 function pgTrack(){
   return '<button class="accbtn" onclick="toggleAcc()">'+(S.acc?"🔡":"🔤")+"</button>"
-  return nav("Seguimiento","vecino-home")+'<div class="nw">'
+  +nav("Seguimiento","vecino-home")+'<div class="nw">'
   +'<h2 style="font-size:18px;font-weight:700;margin:14px 0 4px">Seguí tu reclamo</h2>'
   +'<p style="color:var(--t2);font-size:13px;margin-bottom:14px">Ingresá tu código o DNI</p>'
   +'<div class="card" style="margin-bottom:14px">'
@@ -565,7 +568,7 @@ function pgMapa(){
   +'<option value="todas">Todas las categorías</option>'
   +CATS.map(function(c){return'<option value="'+c.id+'"'+(S.mC===c.id?" selected":"")+'>'+c.icon+' '+c.name+'</option>';}).join("")
   +'</select></div>'
-  +'<div id="lmap" style="height:500px"></div>'
+  +'<div id="lmap" style="height:500px;z-index:1;position:relative"></div>'
   +'<div class="mleg">'
   +(S.mMode==="sec"?Object.entries(SECS).map(function(e){return'<span><span style="display:inline-block;width:11px;height:11px;border-radius:50%;background:'+e[1].color+';margin-right:4px;vertical-align:-1px"></span>'+e[1].label+'</span>';}).join(""):"")
   +(S.mMode==="est"?Object.entries(EC).map(function(e){return'<span><span style="display:inline-block;width:11px;height:11px;border-radius:50%;background:'+e[1].c+';margin-right:4px;vertical-align:-1px"></span>'+e[1].l+'</span>';}).join(""):"")
