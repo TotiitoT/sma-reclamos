@@ -692,7 +692,7 @@ function pgDetail(){
 +'<div class="sl" style="margin:0;color:'+(r.dniVerif?"#1E8449":"#7D3FAB")+'">🪪 Identidad del vecino — Foto DNI</div>'
 +(r.dniVerif
   ?'<span style="background:#E8F8EF;color:#1E8449;padding:2px 10px;border-radius:20px;font-size:11px;font-weight:700">✅ Identidad verificada</span>'
-  :('<button class="btn bsm" style="background:#7D3FAB;color:white" onclick="markDNI(' + JSON.stringify(r.id) + ')">✅ Marcar como verificado</button>')
+  :'<button class="btn bsm" style="background:#7D3FAB;color:white" onclick="markDNI(' + JSON.stringify(r.id) + ')">✅ Marcar como verificado</button>')
 +'</div>'
 +(gf(r.id,"dni")
   ?'<img src="'+gf(r.id,"dni")+'" style="width:100%;border-radius:8px;max-height:200px;object-fit:cover;margin-bottom:8px" alt="DNI vecino">'
@@ -726,7 +726,7 @@ function pgDetail(){
   +'<div style="display:flex;gap:3px;margin:8px 0 4px;font-size:18px">'+[1,2,3,4,5].map(function(i){return i<=r.encuesta.cal?"⭐":"☆";}).join("")
   +'<span style="font-size:14px;font-weight:700;color:var(--p);margin-left:6px">'+r.encuesta.cal+'/5</span></div>'
   +'<p style="font-size:12px;color:var(--t2)">"'+r.encuesta.com+'"</p></div>':"")
-  +'</div>';
+  +'</div>'
 }
 
 function initDetailMap(r){
@@ -1332,7 +1332,7 @@ function pgCuadrilla(){
   h+='<div style="flex:1"><div style="color:#fff;font-size:15px;font-weight:700">Hoja de Ruta</div>';
   h+='<div style="color:rgba(255,255,255,.7);font-size:11px">'+sc.label+'</div></div>';
   h+='<button onclick="S.cuadrillaSec=null;render()" style="background:rgba(255,255,255,.2);border:none;color:#fff;padding:6px 12px;border-radius:7px;font-size:12px;cursor:pointer">Cambiar</button>';
-  h+='<button onclick="go('landing')" style="background:none;border:none;color:rgba(255,255,255,.5);font-size:12px;cursor:pointer;margin-left:6px">Salir</button>';
+  h+='<button onclick="go(\'landing\')" style="background:none;border:none;color:rgba(255,255,255,.5);font-size:12px;cursor:pointer;margin-left:6px">Salir</button>';
   h+='</div>';
   // PROGRESS
   h+='<div style="background:'+sc.color+';padding:8px 16px 12px;display:flex;align-items:center;gap:10px">';
@@ -1351,9 +1351,9 @@ function pgCuadrilla(){
   // SORT BUTTONS
   h+='<div style="display:flex;gap:6px;padding:10px 14px 4px">';
   h+='<span style="font-size:11px;color:#777;align-self:center">Ordenar:</span>';
-  h+='<button onclick="S.cuadrillaSort='prioridad';render()" style="font-size:11px;padding:5px 11px;border-radius:20px;cursor:pointer;border:1px solid '+(sp==='prioridad'?sc.color:'#ccc')+';background:'+(sp==='prioridad'?sc.color:'#fff')+';color:'+(sp==='prioridad'?'#fff':'#666')+'">Prioridad</button>';
-  h+='<button onclick="S.cuadrillaSort='distancia';cqGetGPS();render()" style="font-size:11px;padding:5px 11px;border-radius:20px;cursor:pointer;border:1px solid '+(sp==='distancia'?sc.color:'#ccc')+';background:'+(sp==='distancia'?sc.color:'#fff')+';color:'+(sp==='distancia'?'#fff':'#666')+'">Distancia</button>';
-  h+='<button onclick="S.cuadrillaSort='antiguedad';render()" style="font-size:11px;padding:5px 11px;border-radius:20px;cursor:pointer;border:1px solid '+(sp==='antiguedad'?sc.color:'#ccc')+';background:'+(sp==='antiguedad'?sc.color:'#fff')+';color:'+(sp==='antiguedad'?'#fff':'#666')+'">Antiguedad</button>';
+  h+='<button onclick="S.cuadrillaSort=\'prioridad\';render()" style="font-size:11px;padding:5px 11px;border-radius:20px;cursor:pointer;border:1px solid '+(sp==='prioridad'?sc.color:'#ccc')+';background:'+(sp==='prioridad'?sc.color:'#fff')+';color:'+(sp==='prioridad'?'#fff':'#666')+'">Prioridad</button>';
+  h+='<button onclick="S.cuadrillaSort=\'distancia\';cqGetGPS();render()" style="font-size:11px;padding:5px 11px;border-radius:20px;cursor:pointer;border:1px solid '+(sp==='distancia'?sc.color:'#ccc')+';background:'+(sp==='distancia'?sc.color:'#fff')+';color:'+(sp==='distancia'?'#fff':'#666')+'">Distancia</button>';
+  h+='<button onclick="S.cuadrillaSort=\'antiguedad\';render()" style="font-size:11px;padding:5px 11px;border-radius:20px;cursor:pointer;border:1px solid '+(sp==='antiguedad'?sc.color:'#ccc')+';background:'+(sp==='antiguedad'?sc.color:'#fff')+';color:'+(sp==='antiguedad'?'#fff':'#666')+'">Antiguedad</button>';
   h+='</div>';
   if(sorted.length===0){
     h+='<div style="text-align:center;padding:48px 20px"><div style="font-size:48px;margin-bottom:12px">🎉</div>';
@@ -1378,7 +1378,14 @@ function pgCuadrilla(){
       h+='<span style="font-size:11px;color:#999">'+cat.icon+' '+cat.name+'</span></div>';
       h+='<div style="padding:12px 14px">';
       // F1 foto del problema
-      if(fv)h+='<img src="'+fv+'" style="width:100%;border-radius:8px;max-height:140px;object-fit:cover;margin-bottom:10px;border:1px solid #eee">';
+      if(fv){
+        h+='<div style="margin-bottom:10px">';
+        h+='<div style="font-size:10px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">📸 Foto del problema (subida por el vecino)</div>';
+        h+='<img src="'+fv+'" style="width:100%;border-radius:8px;max-height:160px;object-fit:cover;border:1px solid #ddd">';
+        h+='</div>';
+      } else {
+        h+='<div style="background:#F9F5FF;border:1px dashed #C4A8E0;border-radius:8px;padding:12px;text-align:center;margin-bottom:10px;color:#9B6DFF;font-size:13px">📷 El vecino no subió foto del problema</div>';
+      }
       h+='<div style="font-size:14px;font-weight:700;margin-bottom:4px">'+cat.icon+' '+cat.name+'</div>';
       h+='<div style="font-size:13px;color:#555;margin-bottom:6px">📍 '+r.ub+'</div>';
       h+='<div style="font-size:13px;background:#F3F0EA;padding:8px 10px;border-radius:8px;margin-bottom:8px">'+r.desc+'</div>';
@@ -1400,33 +1407,33 @@ function pgCuadrilla(){
       // navegar
       if(r.lat&&r.lng)h+='<a href="https://www.google.com/maps/dir/?api=1&destination='+r.lat+','+r.lng+'" target="_blank" style="display:flex;align-items:center;justify-content:center;gap:6px;width:100%;padding:9px;background:#E3F2FB;color:#1A8FC7;border-radius:8px;font-size:13px;font-weight:600;margin-bottom:8px;text-decoration:none">🗺 Como llegar</a>';
       // F8 WA en camino
-      h+='<button onclick="cqWAEnCamino(S.reclamos.find(function(x){return x.id===''+rid+''}))" style="width:100%;padding:10px;background:#25D366;color:#fff;border:none;border-radius:9px;font-size:13px;font-weight:700;cursor:pointer;margin-bottom:8px">📲 Avisar al vecino — Estoy en camino</button>';
+      h+='<button onclick="cqWAEnCamino(S.reclamos.find(function(x){return x.id===\''+rid+'\'}))" style="width:100%;padding:10px;background:#25D366;color:#fff;border:none;border-radius:9px;font-size:13px;font-weight:700;cursor:pointer;margin-bottom:8px">📲 Avisar al vecino — Estoy en camino</button>';
       // acciones
       h+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:8px">';
-      h+='<button onclick="cqUpdate(''+rid+'','en_revision','Cuadrilla en camino')" style="padding:11px 8px;background:#E3F2FB;color:#1A8FC7;border:none;border-radius:9px;font-size:13px;font-weight:600;cursor:pointer">📍 En camino</button>';
-      h+='<button onclick="cqUpdate(''+rid+'','en_proceso','Cuadrilla trabajando')" style="padding:11px 8px;background:#F3E8FA;color:#7D3FAB;border:none;border-radius:9px;font-size:13px;font-weight:600;cursor:pointer">🔧 Trabajando</button>';
-      h+='<button onclick="cqShowDone(''+rid+'')" style="padding:12px 8px;background:#E8F8EF;color:#1E8449;border:none;border-radius:9px;font-size:13px;font-weight:600;cursor:pointer;grid-column:1/-1">✅ Termine — subir foto</button>';
+      h+='<button onclick="cqUpdate(\''+rid+'\',\'en_revision\',\'Cuadrilla en camino\')" style="padding:11px 8px;background:#E3F2FB;color:#1A8FC7;border:none;border-radius:9px;font-size:13px;font-weight:600;cursor:pointer">📍 En camino</button>';
+      h+='<button onclick="cqUpdate(\''+rid+'\',\'en_proceso\',\'Cuadrilla trabajando\')" style="padding:11px 8px;background:#F3E8FA;color:#7D3FAB;border:none;border-radius:9px;font-size:13px;font-weight:600;cursor:pointer">🔧 Trabajando</button>';
+      h+='<button onclick="cqShowDone(\''+rid+'\')" style="padding:12px 8px;background:#E8F8EF;color:#1E8449;border:none;border-radius:9px;font-size:13px;font-weight:600;cursor:pointer;grid-column:1/-1">✅ Termine — subir foto</button>';
       h+='</div>';
       // zona foto
       h+='<div id="pz-'+rid+'" style="display:none;margin-bottom:8px">';
       h+='<div style="font-size:12px;font-weight:700;color:var(--g);margin-bottom:8px">📸 Foto del trabajo realizado:</div>';
       h+='<div class="photo-choice">';
-      h+='<label class="photo-label photo-label-cam-v"><input type="file" accept="image/*" capture="environment" onchange="cqFinish(this,''+rid+'')"><span style="font-size:20px">📷</span>Sacar foto</label>';
-      h+='<label class="photo-label photo-label-gal"><input type="file" accept="image/*" onchange="cqFinish(this,''+rid+'')"><span style="font-size:20px">🖼</span>Galeria</label>';
+      h+='<label class="photo-label photo-label-cam-v"><input type="file" accept="image/*" capture="environment" onchange="cqFinish(this,\''+rid+'\')"><span style="font-size:20px">📷</span>Sacar foto</label>';
+      h+='<label class="photo-label photo-label-gal"><input type="file" accept="image/*" onchange="cqFinish(this,\''+rid+'\')"><span style="font-size:20px">🖼</span>Galeria</label>';
       h+='</div></div>';
       // F2 no pude resolver
-      h+='<button onclick="cqTogNota(''+rid+'')" style="width:100%;background:none;border:none;color:#999;font-size:12px;padding:8px 0;cursor:pointer;border-top:1px solid #eee">❌ No pude resolver este trabajo</button>';
+      h+='<button onclick="cqTogNota(\''+rid+'\')" style="width:100%;background:none;border:none;color:#999;font-size:12px;padding:8px 0;cursor:pointer;border-top:1px solid #eee">❌ No pude resolver este trabajo</button>';
       if(showN){
         h+='<div style="padding:10px 0">';
         h+='<div style="font-size:11px;font-weight:700;color:#999;margin-bottom:8px;text-transform:uppercase">Por que no pudiste?</div>';
         h+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:8px">';
         ['Sin material','Requiere maquinaria','Acceso bloqueado','Trabajo nocturno','Derivar contratista','Mal clima'].forEach(function(m){
           var sel=mot===m;
-          h+='<button onclick="cqSelMot(''+rid+'',''+m+'')" style="font-size:12px;padding:7px 6px;background:'+(sel?'#FDEDEC':'#f5f5f5')+';border:1px solid '+(sel?'#C0392B':'#ddd')+';border-radius:8px;cursor:pointer;color:'+(sel?'#C0392B':'#333')+'">'+m+'</button>';
+          h+='<button onclick="cqSelMot(\''+rid+'\',\''+m+'\')" style="font-size:12px;padding:7px 6px;background:'+(sel?'#FDEDEC':'#f5f5f5')+';border:1px solid '+(sel?'#C0392B':'#ddd')+';border-radius:8px;cursor:pointer;color:'+(sel?'#C0392B':'#333')+'">'+m+'</button>';
         });
         h+='</div>';
         h+='<textarea id="cqn-'+rid+'" rows="2" placeholder="Nota adicional..." style="width:100%;padding:8px 10px;border:1px solid #ddd;border-radius:8px;font-size:13px;font-family:inherit;resize:none"></textarea>';
-        h+='<button onclick="cqSaveNota(''+rid+'')" class="btn bp bbl" style="margin-top:8px">Guardar y avisar al admin</button>';
+        h+='<button onclick="cqSaveNota(\''+rid+'\')" class="btn bp bbl" style="margin-top:8px">Guardar y avisar al admin</button>';
         h+='</div>';
       }
       h+='</div></div>';
@@ -1442,14 +1449,14 @@ function pgCqSel(){
   var h='<div style="min-height:100vh;background:#F3F0EA">';
   h+='<div style="background:var(--g);padding:14px 16px;display:flex;align-items:center">';
   h+='<div style="color:#fff;font-size:15px;font-weight:700;flex:1">Portal Cuadrilla</div>';
-  h+='<button onclick="go('landing')" style="background:none;border:none;color:rgba(255,255,255,.6);font-size:12px;cursor:pointer">Salir</button>';
+  h+='<button onclick="go(\'landing\')" style="background:none;border:none;color:rgba(255,255,255,.6);font-size:12px;cursor:pointer">Salir</button>';
   h+='</div><div style="padding:16px">';
   h+='<div style="font-size:13px;color:#777;margin-bottom:12px;font-weight:600">Selecciona tu secretaria:</div>';
   Object.keys(SECS).forEach(function(k){
     var sc=SECS[k];
     var pend=S.reclamos.filter(function(r){return gc(r.cat).sec===k&&r.estado!=='resuelto'&&r.estado!=='cerrado';}).length;
     var alta=S.reclamos.filter(function(r){return gc(r.cat).sec===k&&r.prioridad==='alta'&&r.estado!=='resuelto'&&r.estado!=='cerrado';}).length;
-    h+='<button onclick="S.cuadrillaSec=''+k+'';S.cuadrillaSort='prioridad';render()" style="width:100%;text-align:left;background:#fff;border:2px solid '+sc.color+'44;border-radius:14px;padding:18px 16px;margin-bottom:10px;cursor:pointer">';
+    h+='<button onclick="S.cuadrillaSec=\''+k+'\';S.cuadrillaSort=\'prioridad\';render()" style="width:100%;text-align:left;background:#fff;border:2px solid '+sc.color+'44;border-radius:14px;padding:18px 16px;margin-bottom:10px;cursor:pointer">';
     h+='<div style="font-size:15px;font-weight:700;color:'+sc.color+';margin-bottom:4px">'+sc.label+'</div>';
     h+='<div style="font-size:13px;color:#777">'+pend+' pendientes'+(alta>0?' &nbsp;<strong style="color:#C0392B">'+alta+' urgentes</strong>':'')+'</div>';
     h+='</button>';
