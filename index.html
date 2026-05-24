@@ -111,6 +111,20 @@ tr.row:hover td{background:#fafaf9;cursor:pointer}
 .photo-label-gal{background:var(--bg);color:var(--t2);border:2px solid var(--bd)}
 .photo-label-cam-v{background:#E8F8EF;color:#1E8449;border:2px solid #1E8449}
 
+
+.cluster-badge{display:inline-flex;align-items:center;gap:5px;background:rgba(155,109,255,.15);color:#9B6DFF;border:1px solid rgba(155,109,255,.3);padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700}
+.cluster-alert{background:rgba(155,109,255,.1);border:1px solid rgba(155,109,255,.25);border-radius:12px;padding:14px 16px;margin-bottom:12px}
+.cluster-alert-title{font-size:14px;font-weight:700;color:#9B6DFF;margin-bottom:6px}
+.cluster-alert-body{font-size:13px;color:var(--t2);margin-bottom:12px;line-height:1.5}
+.cluster-btns{display:flex;gap:8px}
+.cluster-main{border-left:3px solid #9B6DFF!important}
+.cluster-sub{opacity:.65;border-left:3px solid rgba(155,109,255,.3)!important}
+.cluster-expand{background:none;border:none;color:var(--t2);font-size:12px;cursor:pointer;padding:4px 0;display:flex;align-items:center;gap:4px}
+.cluster-children{display:none;margin-top:8px;padding:10px;background:rgba(155,109,255,.04);border-radius:8px;border:1px solid rgba(155,109,255,.1)}
+.cluster-children.open{display:block}
+.resolve-all-btn{width:100%;padding:10px;background:#9B6DFF;color:white;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;margin-top:8px}
+.resolve-all-btn:hover{opacity:.88}
+
 .toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);padding:12px 24px;border-radius:30px;font-size:14px;font-weight:600;z-index:9999;opacity:0;transition:opacity .3s;box-shadow:0 4px 14px rgba(0,0,0,.2);pointer-events:none;white-space:nowrap}
 .toast.show{opacity:1}
 .week-banner{background:linear-gradient(135deg,var(--g),var(--gd));color:white;border-radius:12px;padding:16px 18px;margin-bottom:16px;display:flex;align-items:center;gap:14px}
@@ -402,7 +416,21 @@ function pgNR(){
     +'<textarea name="desc" rows="4" placeholder="¿Qué pasó? ¿Desde cuándo? ¿Cómo afecta al vecindario?" required>'+(rf.desc||"")+'</textarea></div>'
     +'<div class="fg"><label>Ubicación exacta *</label>'
     +'<input type="text" name="ub" id="ubInput" value="'+(rf.ub||"")+'" placeholder="Ej: Calle Rivadavia esq. Coronel Pérez" required></div>'
-    +'<div style="margin-bottom:10px"><div style="font-size:11px;color:var(--t2);margin-bottom:6px">📍 <strong>O marcá en el mapa</strong> — arrastrá el punto hasta el lugar exacto del problema</div><div id="locmap" style="height:220px;border-radius:10px;border:1px solid var(--bd)"></div></div>'
+    +(function(){
+    var nearby=S.rf.lat?detectNearby(S.rf.lat,S.rf.lng,S.rf.cat,null):[];
+    if(nearby.length>0){
+      var best=nearby[0];
+      return '<div class="cluster-alert">'
+        +'<div class="cluster-alert-title">⚠️ '+nearby.length+' vecino'+(nearby.length>1?'s':'')+' ya reportaron este problema</div>'
+        +'<div class="cluster-alert-body">Hay '+(nearby.length===1?"un reclamo activo":"reclamos activos")+' de <strong>'+gc(S.rf.cat).name+'</strong> a menos de 100 metros. Sumarte al reclamo existente es más efectivo — le da más peso político y evita duplicados.</div>'
+        +'<div class="cluster-btns">'
+        +'<button class="btn bsm" style="background:#9B6DFF;color:#fff;flex:1" onclick="sumarme(\''+best.id+'\');S.page=\'vecino-home\';render()">📢 Sumarme al reclamo existente</button>'
+        +'<button class="btn bo bsm" style="flex:1" onclick="S.rf._skipCluster=true;render()">Es diferente →</button>'
+        +'</div></div>';
+    }
+    return '';
+  }())
+  +'<div style="margin-bottom:10px"><div style="font-size:11px;color:var(--t2);margin-bottom:6px">📍 <strong>O marcá en el mapa</strong> — arrastrá el punto hasta el lugar exacto del problema</div><div id="locmap" style="height:220px;border-radius:10px;border:1px solid var(--bd)"></div></div>'
     +'<div style="margin-bottom:8px"><div style="font-size:11px;font-weight:600;color:var(--t2);text-transform:uppercase;letter-spacing:.3px;margin-bottom:6px">📸 Foto del problema (recomendado)</div>'
     +'<div class="photo-choice">'
     +'<label class="photo-label photo-label-cam"><input type="file" accept="image/*" capture="environment" onchange="hFV(this)"><span style="font-size:22px">📷</span>Sacar foto</label>'
@@ -504,6 +532,23 @@ function trkResult(r){
   var ci=sO.indexOf(r.estado);var fr=ci/(sO.length-1);
   var fv=gf(r.id,"v");var fo=gf(r.id,"o");
   return'<div class="card" style="margin-bottom:10px">'
+  +(r.isClusterMaster?(function(){
+    var children=getClusterChildren(r.id);
+    if(children.length===0)return '';
+    return '<div class="card" style="margin-bottom:10px;border:1px solid rgba(155,109,255,.3);border-left:3px solid #9B6DFF">'
+      +'<div class="sl" style="color:#9B6DFF;margin-bottom:8px">🔗 Cluster — '+(children.length+1)+' reportes del mismo problema</div>'
+      +'<div style="font-size:13px;color:var(--t2);margin-bottom:10px">'+children.length+' vecino'+(children.length>1?'s adicionales':'  adicional')+' reportaron lo mismo. Resolver desde acá cierra todos al mismo tiempo y notifica a cada uno.</div>'
+      +children.map(function(c){
+        return '<div style="display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(--bd);font-size:12px;color:var(--t2)">'
+          +'<span style="color:#9B6DFF">↳</span>'
+          +'<span style="font-weight:600;color:var(--tx)">'+c.v.nom+'</span>'
+          +'<span>· DNI '+c.v.dni+'</span>'
+          +'<span style="margin-left:auto">'+bdg(c.estado)+'</span>'
+          +'</div>';
+      }).join('')
+      +'<button class="resolve-all-btn" onclick="resolveCluster(\''+r.id+'\')">✅ Resolver todos los '+(children.length+1)+' reclamos de una sola vez</button>'
+      +'</div>';
+  }()):'')
   +'<div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px;margin-bottom:10px">'
   +'<div><div style="font-size:11px;color:var(--t2)">Reclamo '+r.codigo+'</div><div style="font-size:15px;font-weight:700;margin-top:2px">'+cat.icon+' '+cat.name+'</div></div>'
   +'<div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px">'+bdg(r.estado)+' '+pbdg(r.prioridad)+'</div></div>'
@@ -751,7 +796,7 @@ function pgClaims(){
   +'<td style="font-family:monospace;font-size:10px">'+r.codigo+'</td>'
   +'<td>'+(r.v?r.v.nom:"—")+'</td><td>'+c.icon+' '+c.name+'</td><td>'+(r.v?r.v.barrio:"—")+'</td>'
   +'<td><span style="width:9px;height:9px;border-radius:50%;background:'+sc.color+';display:inline-block"></span></td>'
-  +'<td>'+bdg(r.estado)+'</td>'
+  +'<td>'+bdg(r.estado)+(r.isClusterMaster?'<br><span class="cluster-badge">🔗 Cluster ×'+(getClusterChildren(r.id).length+1)+'</span>':'')+(r.isClusterChild?'<br><span style="font-size:10px;color:#9B6DFF">↳ agrupado</span>':'')+'</td>'
   +'<td style="text-align:center">'+(fv?"📸 ":"")+""+(r.dniVerif?"🪪✅":"🪪⚠️")+'</td>'
   +'<td style="font-size:11px;color:var(--t2)">'+fds(r.fechaCreacion)+'</td></tr>';}).join(""))
   +'</tbody></table></div></div></div>';
@@ -1685,6 +1730,80 @@ async function sbLoadAll(){
   }catch(e){console.error("SB load:",e);return null;}
 }
 
+
+// ── CLUSTERING ────────────────────────────────────────────────────────────────
+var CLUSTER_RADIUS_M = 20; // metros — mismo poste, misma vereda, mismo bache
+var CLUSTER_DAYS = 7;       // días hacia atrás para buscar duplicados
+
+function distM(lat1,lng1,lat2,lng2){
+  var R=6371000,dLat=(lat2-lat1)*Math.PI/180,dLng=(lng2-lng1)*Math.PI/180;
+  var a=Math.sin(dLat/2)*Math.sin(dLat/2)+Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLng/2)*Math.sin(dLng/2);
+  return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
+}
+
+function detectNearby(lat,lng,cat,excludeId){
+  if(!lat||!lng)return[];
+  var cutoff=new Date(Date.now()-CLUSTER_DAYS*86400000).toISOString();
+  return S.reclamos.filter(function(r){
+    return r.id!==excludeId
+      && r.cat===cat
+      && r.estado!=="resuelto"&&r.estado!=="cerrado"
+      && r.lat&&r.lng
+      && r.fechaCreacion>=cutoff
+      && distM(lat,lng,r.lat,r.lng)<=CLUSTER_RADIUS_M;
+  });
+}
+
+function getMasterCluster(r){
+  // Si el reclamo tiene clusterId, buscar el master
+  if(r.clusterId){
+    return S.reclamos.find(function(x){return x.id===r.clusterId;})||r;
+  }
+  return r;
+}
+
+function getClusterChildren(masterId){
+  return S.reclamos.filter(function(r){return r.clusterId===masterId;});
+}
+
+function linkToCluster(newReclamoId, masterId){
+  var idx=S.reclamos.findIndex(function(r){return r.id===newReclamoId;});
+  if(idx>=0){
+    S.reclamos[idx].clusterId=masterId;
+    S.reclamos[idx].isClusterChild=true;
+  }
+  // Incrementar votos en el master
+  var midx=S.reclamos.findIndex(function(r){return r.id===masterId;});
+  if(midx>=0){
+    S.reclamos[midx].votos=(S.reclamos[midx].votos||0)+1;
+    S.reclamos[midx].isClusterMaster=true;
+    if(S.reclamos[midx].votos>=3&&S.reclamos[midx].prioridad!=="alta"){
+      S.reclamos[midx].prioridad="alta";
+      S.reclamos[midx].historial.push({f:new Date().toISOString(),e:S.reclamos[midx].estado,n:"Prioridad elevada: múltiples vecinos reportaron el mismo problema.",op:"Sistema"});
+    }
+    sv();
+  }
+}
+
+function resolveCluster(masterId){
+  if(!confirm("¿Resolver este reclamo y todos los reportes vinculados? Se notificará a todos los vecinos."))return;
+  var all=[masterId].concat(getClusterChildren(masterId).map(function(r){return r.id;}));
+  all.forEach(function(id){
+    var idx=S.reclamos.findIndex(function(r){return r.id===id;});
+    if(idx>=0&&S.reclamos[idx].estado!=="resuelto"){
+      S.reclamos[idx].estado="resuelto";
+      S.reclamos[idx].historial.push({f:new Date().toISOString(),e:"resuelto",n:"Resuelto en conjunto con "+all.length+" reportes vinculados del mismo problema.",op:"Administración"});
+    }
+  });
+  sv();
+  showToast("✅ "+all.length+" reclamos resueltos de una sola vez","#1E8449");
+  render();
+}
+
+function toggleClusterChildren(id){
+  var el=document.getElementById("cc-"+id);
+  if(el)el.classList.toggle("open");
+}
 
 function render(){
   var root=document.getElementById("root");
